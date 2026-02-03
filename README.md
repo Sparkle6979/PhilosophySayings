@@ -40,7 +40,11 @@ Based on the current velocity and architectural foundation, here is the estimate
 *   [ ] **Prompt Engineering**: Refine system prompts to generate consistent "Romantic/Poetic" explanations dynamically.
 *   [ ] **Streaming**: Implement typing effects for the "Deep Explanation" to simulate thought generation.
 
-### Phase 3: Community & Social (Est. 1 Week)
+### Phase 3: The "Consultation Room" (Philosopher's Chat)
+*   [ ] **Persona Chat**: Real-time conversation with specific philosophers (e.g., Ask Nietzsche about your bad day).
+*   [ ] **Immersive Context**: System prompts designed to maintain strict character consistency.
+
+### Phase 4: Community & Social (Est. 1 Week)
 *   [ ] **Share Cards**: Generate beautiful image cards of the quote+portrait for sharing on social media.
 *   [ ] **Cloud Sync**: (Optional) Sync favorites across devices using Firebase/Supabase.
 

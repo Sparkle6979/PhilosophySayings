@@ -93,47 +93,71 @@ class _HomePageState extends State<HomePage> {
                       vertical: 20,
                       horizontal: 30,
                     ),
-                    child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly, // 均匀分布，明确左右
-                      children: [
-                        // 左侧：略过按钮 (Pass) - 保持简洁，灰色调
-                        FloatingActionButton(
-                          heroTag: "pass",
-                          onPressed: _loadNewQuote,
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.grey,
-                          elevation: 4,
-                          shape: const CircleBorder(),
-                          child: const Icon(Icons.close, size: 28),
-                        ),
-
-                        // 右侧：共鸣按钮 (Like) - 改为柔和的白色背景 + 红色图标，避免黑色突兀感
-                        FloatingActionButton.extended(
-                          heroTag: "like",
-                          onPressed: () {
-                            // 保存到收藏
-                            FavoritesService().add(snapshot.data!);
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("已收藏到心中的圣殿"),
-                                duration: Duration(milliseconds: 1500),
-                                behavior: SnackBarBehavior.floating, // 悬浮样式更现代
+                    child: ListenableBuilder(
+                      listenable: FavoritesService(),
+                      builder: (context, _) {
+                        final isFav = FavoritesService().isFavorite(
+                          snapshot.data!,
+                        );
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // 左侧：共鸣按钮 (Resonate)
+                            FloatingActionButton.extended(
+                              heroTag: "like",
+                              onPressed: () {
+                                if (isFav) {
+                                  // 已收藏 -> 取消收藏
+                                  FavoritesService().remove(snapshot.data!);
+                                } else {
+                                  // 未收藏 -> 添加收藏
+                                  FavoritesService().add(snapshot.data!);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("已收藏到心中的圣殿"),
+                                      duration: Duration(milliseconds: 1500),
+                                      behavior: SnackBarBehavior.floating,
+                                      width: 400,
+                                    ),
+                                  );
+                                }
+                              },
+                              backgroundColor: isFav
+                                  ? Colors.redAccent
+                                  : Colors.white,
+                              foregroundColor: isFav
+                                  ? Colors.white
+                                  : Colors.redAccent,
+                              elevation: 4,
+                              icon: Icon(
+                                isFav
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_rounded,
                               ),
-                            );
-                            _loadNewQuote(); // 喜欢后也跳到下一个
-                          },
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.redAccent, // 图标和文字颜色
-                          elevation: 4,
-                          icon: const Icon(Icons.favorite_rounded),
-                          label: const Text(
-                            "共鸣",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
+                              label: Text(
+                                isFav ? "已共鸣" : "共鸣",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                            // 右侧：再探索按钮 (Explore)
+                            FloatingActionButton.extended(
+                              heroTag: "explore",
+                              onPressed: _loadNewQuote,
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black87,
+                              elevation: 4,
+                              icon: const Icon(Icons.explore_outlined),
+                              label: const Text(
+                                "寻觅",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ],

@@ -65,13 +65,14 @@ class FavoritesPage extends StatelessWidget {
                 ),
                 onDismissed: (direction) {
                   favoritesService.remove(quote);
+                  ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      behavior:
+                          SnackBarBehavior.floating, // 悬浮样式，避免被底部遮挡或产生交互冲突
+                      width: 400, // 限制宽度，更像一个 Toast
                       content: Text("已移除: ${quote.author}"),
-                      action: SnackBarAction(
-                        label: "撤销",
-                        onPressed: () => favoritesService.add(quote),
-                      ),
+                      duration: const Duration(seconds: 2),
                     ),
                   );
                 },
@@ -94,18 +95,48 @@ class FavoritesPage extends StatelessWidget {
                     ),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "— ${quote.author}",
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "— ${quote.author}",
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          if (quote.tagline != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              quote.tagline!,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                      color: Colors.grey,
+                    trailing: IconButton(
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        // 显示确认对话框或直接删除
+                        favoritesService.remove(quote);
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            width: 400,
+                            content: Text("已移除: ${quote.author}"),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      },
                     ),
                     onTap: () {
                       // Optionally show full details dialog
@@ -165,6 +196,17 @@ class FavoritesPage extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              if (quote.tagline != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  quote.tagline!,
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
               const Divider(height: 40),
               if (quote.explanation.isNotEmpty) ...[
                 Text(

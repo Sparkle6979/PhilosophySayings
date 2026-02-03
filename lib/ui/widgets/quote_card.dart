@@ -74,6 +74,33 @@ class QuoteCard extends StatelessWidget {
                       fontStyle: FontStyle.italic,
                     ),
                   ),
+                  const SizedBox(height: 24),
+
+                  // 作者名
+                  Text(
+                    "— ${quote.author}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54,
+                    ),
+                  ),
+
+                  // Tagline (新建)
+                  if (quote.tagline != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      quote.tagline!,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.notoSerif(
+                        fontSize: 15,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+
                   const SizedBox(height: 32),
 
                   // 3. 分割线
