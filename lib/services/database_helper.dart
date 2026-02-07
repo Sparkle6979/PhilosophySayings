@@ -24,33 +24,33 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2, // 升级版本号
-      onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
+      version: 3, // 升级版本号
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE favorites(
+            id TEXT PRIMARY KEY,
+            text TEXT,
+            author TEXT,
+            tagline TEXT,
+            explanation TEXT,
+            imageUrl TEXT,
+            bio TEXT,
+            life_years TEXT,
+            theme TEXT,
+            timestamp INTEGER
+          )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('ALTER TABLE favorites ADD COLUMN tagline TEXT');
+        }
+        if (oldVersion < 3) {
+          await db.execute('ALTER TABLE favorites ADD COLUMN life_years TEXT');
+          await db.execute('ALTER TABLE favorites ADD COLUMN theme TEXT');
+        }
+      },
     );
-  }
-
-  /// 首次创建数据库时执行 SQL 建表
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE favorites(
-        id TEXT PRIMARY KEY,
-        text TEXT,
-        author TEXT,
-        tagline TEXT,
-        explanation TEXT,
-        imageUrl TEXT,
-        bio TEXT,
-        timestamp INTEGER
-      )
-    ''');
-  }
-
-  /// 数据库升级逻辑
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      await db.execute('ALTER TABLE favorites ADD COLUMN tagline TEXT');
-    }
   }
 
   // --- CRUD Operations ---
