@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/quote.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../services/llm_service.dart'; // DeepSeek Service
 import '../../services/favorites_service.dart';
 import '../../services/share_service.dart'; // Share Service
@@ -86,14 +87,45 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5), // 浅灰背景，更有质感
       appBar: AppBar(
-        title: const Text('Philosophy Sayings'),
+        // title: const Text('Philosophy Sayings'),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 装饰性花纹 (Typographic Decoration)
+            const Text(
+              '— ❦ —',
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.black45,
+                fontWeight: FontWeight.w300,
+                letterSpacing: 2.0,
+              ),
+            ),
+            // 主标题
+            Text(
+              'PHILOSOPHY SAYINGS',
+              style: GoogleFonts.imFellEnglishSc(
+                fontSize:
+                    16, // Slightly larger for this font as it's smaller visually
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                letterSpacing: 1.5, // Less spacing for rugged feel
+              ),
+            ),
+          ],
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent, // 透明 AppBar 现代感更强
         foregroundColor: Colors.black, // 黑色文字
+        toolbarHeight: 50, // 进一步减小高度 (50 -> 40)
         actions: [
           IconButton(
-            icon: const Icon(Icons.bookmarks_rounded, color: Colors.black87),
+            icon: const Icon(
+              Icons.bookmarks_rounded,
+              color: Colors.black54,
+              size: 20,
+            ), // 稍微减小图标并变淡
             onPressed: () {
               Navigator.push(
                 context,
@@ -101,29 +133,32 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+          const SizedBox(width: 8), // 右侧边距微调
         ],
       ),
-      body: Center(
-        child: FutureBuilder<Quote>(
-          future: _quoteFuture,
-          builder: (context, snapshot) {
-            // 1. 加载中
-            if (snapshot.connectionState == ConnectionState.waiting ||
-                _isLoading) {
-              return const Column(
+      body: FutureBuilder<Quote>(
+        future: _quoteFuture,
+        builder: (context, snapshot) {
+          // 1. 加载中
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              _isLoading) {
+            return const Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
                   Text("正在连接全知之海...", style: TextStyle(color: Colors.grey)),
                 ],
-              );
-            }
+              ),
+            );
+          }
 
-            // 2. 错误处理
-            if (snapshot.hasError) {
-              _showError("发生了时空扰动: ${snapshot.error}");
-              return Column(
+          // 2. 错误处理
+          if (snapshot.hasError) {
+            _showError("发生了时空扰动: ${snapshot.error}");
+            return Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.error_outline, size: 48, color: Colors.red),
@@ -131,43 +166,49 @@ class _HomePageState extends State<HomePage> {
                   Text("发生了时空扰动: ${snapshot.error}"),
                   TextButton(onPressed: _loadNewQuote, child: const Text("重试")),
                 ],
-              );
-            }
+              ),
+            );
+          }
 
-            // 3. 数据加载成功
-            if (snapshot.hasData) {
-              _currentQuote = snapshot.data!; // Ensure _currentQuote is updated
-              return Column(
-                children: [
-                  // 2. Quote Card Area (Wrapped for Capture)
-                  Expanded(
-                    child: Center(
-                      child: SingleChildScrollView(
-                        child: RepaintBoundary(
-                          key: _quoteCardKey,
-                          child: QuoteCard(quote: _currentQuote!),
-                        ),
+          // 3. 数据加载成功
+          if (snapshot.hasData) {
+            _currentQuote = snapshot.data!; // Ensure _currentQuote is updated
+            return Column(
+              children: [
+                // 1. Quote Card Area (Wrapped for Capture)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10.0), // 顶部固定间距
+                    child: SingleChildScrollView(
+                      child: RepaintBoundary(
+                        key: _quoteCardKey,
+                        child: QuoteCard(quote: _currentQuote!),
                       ),
                     ),
                   ),
+                ),
 
-                  // 底部操作栏
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 30,
-                    ),
-                    child: ListenableBuilder(
-                      listenable: FavoritesService(),
-                      builder: (context, _) {
-                        final isFav = FavoritesService().isFavorite(
-                          snapshot.data!,
-                        );
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // 左侧：共鸣按钮 (Resonate / Like)
-                            FloatingActionButton.extended(
+                // 2. 底部操作栏 (Action Bar)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 30,
+                    right: 30,
+                    top: 18,
+                    bottom: 18, // Reduced from 20 to 10 to be "lower"
+                  ),
+                  child: ListenableBuilder(
+                    listenable: FavoritesService(),
+                    builder: (context, _) {
+                      final isFav = FavoritesService().isFavorite(
+                        snapshot.data!,
+                      );
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // 左侧：共鸣按钮 (Resonate / Like)
+                          SizedBox(
+                            height: 40,
+                            child: FloatingActionButton.extended(
                               heroTag: "like",
                               onPressed: () {
                                 if (isFav) {
@@ -190,60 +231,86 @@ class _HomePageState extends State<HomePage> {
                               foregroundColor: isFav
                                   ? Colors.white
                                   : Colors.redAccent,
-                              elevation: 4,
+                              elevation: 2,
+                              extendedPadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               icon: Icon(
                                 isFav
                                     ? Icons.favorite
                                     : Icons.favorite_border_rounded,
+                                size: 18,
                               ),
                               label: Text(
                                 isFav ? "已共鸣" : "共鸣",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 13,
                                 ),
                               ),
                             ),
+                          ),
 
-                            // 中间：再探索按钮 (Explore / Search) - Moved to Center
-                            FloatingActionButton.extended(
+                          // 中间：再探索按钮 (Explore / Search)
+                          SizedBox(
+                            height: 40,
+                            child: FloatingActionButton.extended(
                               heroTag: "explore",
                               onPressed: _loadNewQuote,
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black87,
-                              elevation: 4,
-                              icon: const Icon(Icons.explore_outlined),
+                              elevation: 2,
+                              extendedPadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              icon: const Icon(
+                                Icons.explore_outlined,
+                                size: 18,
+                              ),
                               label: const Text(
                                 "寻觅",
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
+                          ),
 
-                            // 右侧：分享按钮 (Share / Transmit) - Moved to Right, Renamed to "传递"
-                            FloatingActionButton.extended(
+                          // 右侧：分享按钮 (Share / Transmit)
+                          SizedBox(
+                            height: 40,
+                            child: FloatingActionButton.extended(
                               heroTag: "share",
                               onPressed: _shareQuote,
-                              backgroundColor: Colors.white, // White background
-                              foregroundColor: Colors.black87, // Black icon
-                              elevation: 4,
-                              icon: const Icon(Icons.share_outlined),
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black87,
+                              elevation: 2,
+                              extendedPadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              icon: const Icon(Icons.share_outlined, size: 18),
                               label: const Text(
-                                "传递", // Poetic name: Pass on/Transmit
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                "传递",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
                               ),
                               tooltip: "传递哲思",
                             ),
-                          ],
-                        );
-                      },
-                    ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                ],
-              );
-            }
+                ),
+              ],
+            );
+          }
 
-            return const SizedBox();
-          },
-        ),
+          return const SizedBox();
+        },
       ),
     );
   }

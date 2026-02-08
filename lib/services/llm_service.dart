@@ -12,7 +12,8 @@ class LLMService {
   // DeepSeek API Key (Hiding for GitHub upload)
   static const String _apiKey = String.fromEnvironment(
     'DEEPSEEK_API_KEY',
-    defaultValue: '',
+    defaultValue:
+        '', // Key removed for security. Pass via --dart-define=DEEPSEEK_API_KEY=...
   );
 
   // DeepSeek Base URL
@@ -55,10 +56,10 @@ class LLMService {
 6. 必须返回严格的 JSON 格式。
 
 JSON 字段要求：
-- text: 名言正文（中文）。**必须精炼、深刻, 是这句名言最广为流传的版本**，尽量控制在 40 字以内。如果是翻译，请使用优美凝练的中文。
+- text: 名句正文（中文）。**必须精炼、深刻, 是这句名句最广为流传的版本**，尽量控制在 40 字以内。如果是翻译，请使用优美凝练的中文。
 - author: 哲学家姓名（中文）。
 - life_years: 哲学家的生卒年（例如 "1844-1900" 或 "前470-前399"）。
-- theme: 这句名言所属的哲学领域（例如 "存在主义" 或 "伦理学"）。
+- theme: 这句名句所属的哲学领域（例如 "存在主义" 或 "伦理学"）。
 - tagline: 一句简短的、极具画面感或深意的形容（Contextual Tagline），不要超过12个字。
 - bio: 哲学家生平简介（50字以内）。
 - explanation: 对这句名言的深度哲学解析（精炼深刻，150字以内）。
@@ -73,10 +74,19 @@ JSON 字段要求：
 
   /// 核心方法：获取一条随机哲学金句
   Future<Quote> fetchRandomQuote() async {
-    // 1. 检查 Key 配置，如果未配置则降级使用 Mock
-    if (_apiKey == 'YOUR_API_KEY_HERE' || _apiKey.isEmpty) {
-      print('⚠️ API Key not detected. Using Mock Data.');
+    // 1. 检查 Key 配置
+    if (_apiKey.isEmpty) {
+      print('⚠️ DEEPSEEK_API_KEY is empty. Using Mock Data.');
+      print(
+        '💡 Tip: Ensure you are using the "Local Debug" configuration in your IDE.',
+      );
       return _fetchMockQuote();
+    }
+
+    if (!_apiKey.startsWith('sk-')) {
+      print('⚠️ API Key format seems invalid (does not start with sk-).');
+    } else {
+      print('✅ API Key detected (prefix: ${_apiKey.substring(0, 5)}...)');
     }
 
     try {
@@ -133,7 +143,7 @@ JSON 字段要求：
       // Quotes
       final quoteText = result['text'] as String;
       _recentQuotes.add(quoteText);
-      if (_recentQuotes.length > 10) _recentQuotes.removeAt(0); // 记住最近 10 条名言
+      if (_recentQuotes.length > 20) _recentQuotes.removeAt(0); // 记住最近 15 条名言
       // ------------------
 
       // 合并数据
@@ -222,6 +232,32 @@ JSON 字段要求：
       '加缪': 'camus',
       'kierkegaard': 'kierkegaard',
       '克尔凯郭尔': 'kierkegaard',
+      'descartes': 'descartes',
+      '笛卡尔': 'descartes',
+      'socrates': 'socrates',
+      '苏格拉底': 'socrates',
+      'pascal': 'pascal',
+      '帕斯卡': 'pascal',
+      'weber': 'weber',
+      '韦伯': 'weber',
+      'kant': 'kant',
+      '康德': 'kant',
+      'marx': 'marx',
+      '马克思': 'marx',
+      'hegel': 'hegel',
+      '黑格尔': 'hegel',
+      'proust': 'proust',
+      '普鲁斯特': 'proust',
+      'heraclitus': 'heraclitus',
+      '赫拉克利特': 'heraclitus',
+      'bacon': 'bacon',
+      '培根': 'bacon',
+      'rousseau': 'rousseau',
+      '卢梭': 'rousseau',
+      'spinoza': 'spinoza',
+      '斯宾诺莎': 'spinoza',
+      'schopenhauer': 'schopenhauer',
+      '叔本华': 'schopenhauer',
     };
 
     String? prefix;
