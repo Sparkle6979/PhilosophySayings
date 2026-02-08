@@ -6,6 +6,7 @@ import '../../services/favorites_service.dart';
 import '../../services/share_service.dart'; // Share Service
 import '../widgets/quote_card.dart';
 import 'favorites_page.dart';
+import 'philosophers_chamber_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,6 +20,11 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _quoteCardKey = GlobalKey(); // Key for capturing image
   bool _isLoading = false;
   Quote? _currentQuote;
+  // Store chat history for each quote to persist session
+  // State Lifting: 将聊天记录提升到 HomePage 管理
+  // Key: Quote.text (名言内容作为唯一标识)
+  // Value: 聊天记录列表
+  final Map<String, List<Map<String, String>>> _chatHistories = {};
 
   // Future 用于存储异步操作的状态
   late Future<Quote> _quoteFuture;
@@ -105,11 +111,10 @@ class _HomePageState extends State<HomePage> {
             Text(
               'PHILOSOPHY SAYINGS',
               style: GoogleFonts.imFellEnglishSc(
-                fontSize:
-                    16, // Slightly larger for this font as it's smaller visually
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
-                letterSpacing: 1.5, // Less spacing for rugged feel
+                letterSpacing: 1.5,
               ),
             ),
           ],
@@ -122,10 +127,21 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(
+              Icons.share_outlined,
+              size: 20,
+              color: Colors.black54,
+            ),
+            tooltip: "分享哲思",
+            onPressed: _shareQuote,
+          ),
+          const SizedBox(width: 8), // Spacing
+          IconButton(
+            icon: const Icon(
               Icons.bookmarks_rounded,
               color: Colors.black54,
               size: 20,
             ), // 稍微减小图标并变淡
+            tooltip: "哲思收藏",
             onPressed: () {
               Navigator.push(
                 context,
@@ -139,16 +155,47 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<Quote>(
         future: _quoteFuture,
         builder: (context, snapshot) {
-          // 1. 加载中
+          // 1. 加载中 (Thematic Loading)
           if (snapshot.connectionState == ConnectionState.waiting ||
               _isLoading) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text("正在连接全知之海...", style: TextStyle(color: Colors.grey)),
+                  // Minimalist Pulse Animation
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.3, end: 1.0),
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeInOut,
+                    builder: (context, value, child) {
+                      return Opacity(opacity: value, child: child);
+                    },
+                    onEnd:
+                        () {}, // Loop handled by widget state if needed, but simple fade is enough for short waits
+                    child: const Icon(
+                      Icons.auto_awesome, // Sparkle/Star icon
+                      size: 32,
+                      color: Colors.black26,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Visiting the Omniscient Sea...", // More poetic
+                    style: GoogleFonts.imFellEnglishSc(
+                      color: Colors.black45,
+                      fontSize: 16,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    "正在造访全知之海...",
+                    style: TextStyle(
+                      color: Colors.black38,
+                      fontSize: 12,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -251,7 +298,72 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
 
-                          // 中间：再探索按钮 (Explore / Search)
+                          // 中间：密室锚点 (Anchor / Chamber) - Primary Action
+                          SizedBox(
+                            height: 40,
+                            child: FloatingActionButton.extended(
+                              heroTag: "anchor",
+                              onPressed: () {
+                                if (snapshot.data == null) return;
+                                final quote = snapshot.data!;
+                                // Retrieve existing history or null
+                                // [持久化逻辑]: 在进入密室前，先检查 memory 中是否有这句名言的聊天记录
+                                final history = _chatHistories[quote.text];
+
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) => PhilosophersChamberPage(
+                                          quote: quote,
+                                          initialHistory: history, // 将历史记录传入子页面
+                                          onChatUpdated: (newHistory) {
+                                            // [状态同步]: 子页面 (ChamberPage) 产生新消息时，回调此函数更新父页面状态
+                                            _chatHistories[quote.text] =
+                                                newHistory;
+                                          },
+                                        ),
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                    transitionDuration: const Duration(
+                                      milliseconds: 800,
+                                    ),
+                                  ),
+                                );
+                              },
+                              backgroundColor:
+                                  Colors.white, // Reverted to white
+                              foregroundColor: Colors.black87,
+                              elevation: 2,
+                              extendedPadding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              icon: const Icon(Icons.vpn_key_rounded, size: 18),
+                              label: const Text(
+                                "锚定",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              tooltip: "进入密室",
+                            ),
+                          ),
+
+                          // 右侧：再探索按钮 (Explore / Search) - Secondary
                           SizedBox(
                             height: 40,
                             child: FloatingActionButton.extended(
@@ -274,30 +386,6 @@ class _HomePageState extends State<HomePage> {
                                   fontSize: 13,
                                 ),
                               ),
-                            ),
-                          ),
-
-                          // 右侧：分享按钮 (Share / Transmit)
-                          SizedBox(
-                            height: 40,
-                            child: FloatingActionButton.extended(
-                              heroTag: "share",
-                              onPressed: _shareQuote,
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black87,
-                              elevation: 2,
-                              extendedPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              icon: const Icon(Icons.share_outlined, size: 18),
-                              label: const Text(
-                                "传递",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              tooltip: "传递哲思",
                             ),
                           ),
                         ],

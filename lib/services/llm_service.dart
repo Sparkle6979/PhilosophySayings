@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
+import '../config/prompts.dart'; // 引入配置文件
 import '../models/quote.dart';
 
 // Service Layer: 负责所有的数据获取
@@ -28,49 +29,75 @@ class LLMService {
   final List<String> _recentQuotes = [];
 
   // 缓存 Chain 实例，避免重复创建
+  // [LangChain 概念]: Runnable 是 LangChain 中的基本工作单元，不仅是一个类，更是一个协议。
+  // 所有的 Chain、Model、OutputParser 都实现了 Runnable 接口，这意味着它们可以被
+  // 统一调用 (.invoke) 或 串联 (.pipe)。
   late final Runnable _stringChain;
 
   LLMService() {
     // 初始化 Chain
-    // 1. 初始化模型
+    // 1. 初始化模型 (Chat Model)
+    // [LangChain 概念]: ChatOpenAI 是对 OpenAI 兼容接口的封装。
+    // 它负责与 LLM 服务端通信。
     final model = ChatOpenAI(
       apiKey: _apiKey,
       baseUrl: _baseUrl,
       defaultOptions: const ChatOpenAIOptions(
-        temperature: 1.5, // High temperature for max diversity
+        temperature: 1.5, // High temperature for max diversity (创造性)
         model: 'deepseek-chat',
       ),
     );
 
-    // 2. 定义 Prompt
+    // 2. 定义 Prompt (Prompt Template)
+    // [LangChain 概念]: ChatPromptTemplate 用于构建发送给 LLM 的消息列表。
+    // 它将静态的指令 (System Prompt) 和动态的用户输入 (Human Prompt) 结合起来。
+    // 其中的 {variable} 是占位符，会在运行时被 .invoke() 传入的参数替换。
     final promptTemplate = ChatPromptTemplate.fromPromptMessages([
-      SystemChatMessagePromptTemplate.fromTemplate('''
-你是一位博古通今的哲学大师。请从**非中国古代**的哲学名家中，随机挑选一位。
-
-**约束条件**:
-1. **排除中国古代哲学家**: 聚焦于西方哲学史（古希腊、中世纪、近现代）或其他非中国传统。
-2. **避免重复作者**: 不要是以下哲学家：[{excluded_authors}]。
-3. **避免重复主题**: 请尽量避开以下哲学领域：[{excluded_themes}]，尝试探索其他领域（如伦理学、形而上学、政治哲学、美学、逻辑学、科学哲学等）。
-4. **避免重复名言**: 绝对不要返回以下内容或与之极其相似的名言：[{excluded_quotes}]。
-5. **存在主义倾向**: 该用户倾向于使用存在主义（尼采、加缪、海德格尔、萨特、克尔凯郭尔）来探讨现代虚无主义。请在选择时，20% 的时间应优先考虑这些哲学家或主题，但同时也要保持多样性。.
-6. 必须返回严格的 JSON 格式。
-
-JSON 字段要求：
-- text: 名句正文（中文）。**必须精炼、深刻, 是这句名句最广为流传的版本**，尽量控制在 40 字以内。如果是翻译，请使用优美凝练的中文。
-- author: 哲学家姓名（中文）。
-- life_years: 哲学家的生卒年（例如 "1844-1900" 或 "前470-前399"）。
-- theme: 这句名句所属的哲学领域（例如 "存在主义" 或 "伦理学"）。
-- tagline: 一句简短的、极具画面感或深意的形容（Contextual Tagline），不要超过12个字。
-- bio: 哲学家生平简介（50字以内）。
-- explanation: 对这句名言的深度哲学解析（精炼深刻，150字以内）。
-'''),
+      // System Message: 设定 AI 的角色和行为规范 (从 config/prompts.dart 读取)
+      SystemChatMessagePromptTemplate.fromTemplate(
+        AppPrompts.fetchQuoteSystemPrompt,
+      ),
+      // Human Message: 用户的实际请求
       HumanChatMessagePromptTemplate.fromTemplate('请赐予我一句智慧。Output JSON only.'),
     ]);
 
-    // 3. 构建 Chain
-    // 分步执行以避免泛型类型推断问题
+    // 3. 构建 Chain (LCEL - LangChain Expression Language)
+    // [LangChain 概念]: Pipe (|) 运算符
+    // 这行代码展示了 LangChain 最核心的特性：链式调用。
+    // 数据流向: PromptTemplate -> Model -> OutputParser
+    // 1. PromptTemplate 接收参数，生成 List<ChatMessage>
+    // 2. Model 接收消息，调用 API，返回 ChatResult
+    // 3. StringOutputParser 接收 ChatResult，提取出 content 字符串
     _stringChain = promptTemplate.pipe(model).pipe(const StringOutputParser());
+
+    // --- Philosopher's Chamber: Opening Chain ---
+    // [LangChain 概念]: 不同的任务需要不同的 Chain
+    // 这里我们定义了一个专门用于生成“开场白”的 Prompt
+    final openingPrompt = ChatPromptTemplate.fromPromptMessages([
+      SystemChatMessagePromptTemplate.fromTemplate(
+        AppPrompts.philosopherChamberOpeningSystemPrompt,
+      ),
+      HumanChatMessagePromptTemplate.fromTemplate('访客已入座。请开始你的发问。'),
+    ]);
+    _openingChain = openingPrompt.pipe(model).pipe(const StringOutputParser());
+
+    // --- Philosopher's Chamber: Chat Chain ---
+    // [LangChain 概念]: 带有历史记录的 Prompt
+    final chatPrompt = ChatPromptTemplate.fromPromptMessages([
+      SystemChatMessagePromptTemplate.fromTemplate(
+        AppPrompts.philosopherChamberChatSystemPrompt,
+      ),
+      // [LangChain 概念]: MessagesPlaceholder
+      // 这是一个特殊的占位符，用于插入对话历史 (History)。
+      // 它会被替换为一系列的 ChatMessage 对象 (HumanMessage, AIMessage)。
+      MessagesPlaceholder(variableName: 'history'),
+      HumanChatMessagePromptTemplate.fromTemplate('{input}'),
+    ]);
+    _chatChain = chatPrompt.pipe(model).pipe(const StringOutputParser());
   }
+
+  late final Runnable _openingChain;
+  late final Runnable _chatChain;
 
   /// 核心方法：获取一条随机哲学金句
   Future<Quote> fetchRandomQuote() async {
@@ -258,6 +285,14 @@ JSON 字段要求：
       '斯宾诺莎': 'spinoza',
       'schopenhauer': 'schopenhauer',
       '叔本华': 'schopenhauer',
+      'plato': 'plato',
+      '柏拉图': 'plato',
+      'aristotle': 'aristotle',
+      '亚里士多德': 'aristotle',
+      'husserl': 'husserl',
+      '胡塞尔': 'husserl',
+      'wittgenstein': 'wittgenstein',
+      '维特根斯坦': 'wittgenstein',
     };
 
     String? prefix;
@@ -297,6 +332,71 @@ JSON 字段要求：
       print('Warning: Asset mapping failed: $e');
       // 默认回退：使用剪影通用图
       return 'assets/images/philosopher_default.png';
+    }
+  }
+
+  /// --- Philosopher's Chamber Logic ---
+
+  /// 生成“密室”开场白
+  Future<String> generateOpeningQuestion(Quote quote) async {
+    if (_apiKey.isEmpty) {
+      // Mock Fallback
+      await Future.delayed(const Duration(seconds: 1));
+      return '你为何因这句话而停留？"${quote.text}"... 是因为你在虚无中感到寒冷了吗？(Mock)';
+    }
+
+    try {
+      final res = await _openingChain.invoke({
+        'author': quote.author,
+        'bio': quote.bio,
+        'tagline': quote.tagline,
+        'quote': quote.text,
+      });
+      return res.toString();
+    } catch (e) {
+      print('Error generating opening: $e');
+      return '你凝视着这句话... 它唤醒了你心中的什么？'; // Fallback generic opening
+    }
+  }
+
+  /// 与哲学家对话
+  Future<String> chatWithPhilosopher(
+    Quote quote,
+    String input,
+    List<Map<String, String>> history,
+  ) async {
+    if (_apiKey.isEmpty) {
+      // Mock Fallback
+      await Future.delayed(const Duration(seconds: 1));
+      return '这是模拟的回复。你的思考很有深度，但我们现在处于离线模式。';
+    }
+
+    try {
+      // Convert history map to LangChain Message objects
+      // Note: This is a simplified conversion. For robust history, use proper Message classes.
+      // But passing raw input/history logic might differ based on LangChain Dart version.
+      // LangChain Dart: MessagesPlaceholder expects a list of ChatMessage.
+
+      final List<ChatMessage> chatHistory = history.map((msg) {
+        if (msg['role'] == 'user') {
+          return ChatMessage.humanText(msg['content']!);
+        } else {
+          return ChatMessage.ai(msg['content']!);
+        }
+      }).toList();
+
+      final res = await _chatChain.invoke({
+        'author': quote.author,
+        'bio': quote.bio,
+        'tagline': quote.tagline,
+        'quote': quote.text,
+        'history': chatHistory,
+        'input': input,
+      });
+      return res.toString();
+    } catch (e) {
+      print('Error chatting: $e');
+      return '（哲学家陷入了沉思... 似乎信号中断了）';
     }
   }
 
