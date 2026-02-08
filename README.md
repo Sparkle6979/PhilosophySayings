@@ -56,4 +56,4 @@ An immersive, aesthetically pleasing Flutter application that delivers daily phi
     ```
 
 ---
-*Created with ❤️ by Antigravity & User*
+*Created with ❤️ by Antigravity & Sparkle79*
