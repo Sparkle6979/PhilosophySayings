@@ -51,8 +51,8 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
   }
 
   void _playEntranceAnimation() async {
-    // Keep the text visible for a moment
-    await Future.delayed(const Duration(milliseconds: 1500));
+    // Keep the text visible for a moment - increased delay for atmosphere
+    await Future.delayed(const Duration(milliseconds: 2000));
     if (mounted) {
       setState(() {
         _showIntro = false; // Trigger fade out
@@ -61,10 +61,11 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
   }
 
   void _simulateOpening() async {
-    // Artificial delay for atmosphere (沉浸感)
-    await Future.delayed(const Duration(milliseconds: 1500));
+    // Artificial delay for atmosphere (沉浸感) - match entrance
+    await Future.delayed(const Duration(milliseconds: 2000));
 
     if (!mounted) return;
+    // ... (rest of _simulateOpening is fine, just need to match context)
 
     try {
       // Call LLM for dynamic opening based on the quote
@@ -190,6 +191,17 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      if (widget.quote.lifeYears != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.quote.lifeYears!,
+                          style: GoogleFonts.lato(
+                            color: Colors.white38,
+                            fontSize: 12,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      ],
                       if (widget.quote.tagline != null &&
                           widget.quote.tagline!.isNotEmpty) ...[
                         const SizedBox(height: 6), // More spacing
@@ -367,6 +379,29 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      // Kiyoshi Kasai Quote
+                      Text(
+                        "“密室，是人类意识的现象学还原。”",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.notoSerifSc(
+                          color: Colors.white70,
+                          fontSize: 18,
+                          letterSpacing: 2.0,
+                          height: 1.4,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "—— 笠井洁《哲学者们的密室》",
+                        style: GoogleFonts.lato(
+                          color: Colors.white54,
+                          fontSize: 12,
+                          letterSpacing: 1.0,
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
                     ],

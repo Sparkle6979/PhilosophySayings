@@ -6,6 +6,7 @@ import '../../services/favorites_service.dart';
 import '../../services/share_service.dart'; // Share Service
 import '../widgets/quote_card.dart';
 import 'favorites_page.dart';
+import 'settings_page.dart';
 import 'philosophers_chamber_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -147,6 +148,30 @@ class _HomePageState extends State<HomePage> {
                 context,
                 MaterialPageRoute(builder: (_) => const FavoritesPage()),
               );
+            },
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: Colors.black54,
+              size: 20,
+            ),
+            tooltip: "设置",
+            onPressed: () async {
+              // Navigate to Settings Page
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsPage()),
+              );
+              // Upon return, reload LLM Config
+              if (mounted) {
+                setState(() {
+                  _llmService.reloadConfig();
+                  // Optionally reload quote if needed, but not strictly necessary
+                  // _loadNewQuote();
+                });
+              }
             },
           ),
           const SizedBox(width: 8), // 右侧边距微调

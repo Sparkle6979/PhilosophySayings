@@ -5,21 +5,14 @@ import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import '../config/prompts.dart'; // 引入配置文件
 import '../models/quote.dart';
+import '../models/llm_config.dart';
+import 'preference_service.dart';
 
 // Service Layer: 负责所有的数据获取
 class LLMService {
-  // TODO: Replace with your actual implementation or environment variables
-  // 暂时硬编码 Key，后续会改为从 Settings 读取
-  // DeepSeek API Key (Hiding for GitHub upload)
-  static const String _apiKey = String.fromEnvironment(
-    'DEEPSEEK_API_KEY',
-    defaultValue:
-        '', // Key removed for security. Pass via --dart-define=DEEPSEEK_API_KEY=...
-  );
-
-  // DeepSeek Base URL
-  // Docs: https://api-docs.deepseek.com/
-  static const String _baseUrl = 'https://api.deepseek.com';
+  // DeepSeek Defaults
+  static const String _defaultApiKey =
+      ''; // Experience Key - Set this to your shared key
 
   // 最近出现过的哲学家名单 (用于避免短期重复)
   final List<String> _recentAuthors = [];
@@ -28,51 +21,62 @@ class LLMService {
   // 最近出现过的名言内容 (用于避免内容重复)
   final List<String> _recentQuotes = [];
 
-  // 缓存 Chain 实例，避免重复创建
-  // [LangChain 概念]: Runnable 是 LangChain 中的基本工作单元，不仅是一个类，更是一个协议。
-  // 所有的 Chain、Model、OutputParser 都实现了 Runnable 接口，这意味着它们可以被
-  // 统一调用 (.invoke) 或 串联 (.pipe)。
-  late final Runnable _stringChain;
+  late Runnable _stringChain;
+  late Runnable _openingChain;
+  late Runnable _chatChain;
+  late LLMConfig _currentConfig;
 
   LLMService() {
-    // 初始化 Chain
-    // 1. 初始化模型 (Chat Model)
-    // [LangChain 概念]: ChatOpenAI 是对 OpenAI 兼容接口的封装。
-    // 它负责与 LLM 服务端通信。
-    final model = ChatOpenAI(
-      apiKey: _apiKey,
-      baseUrl: _baseUrl,
-      defaultOptions: const ChatOpenAIOptions(
-        temperature: 1.5, // High temperature for max diversity (创造性)
-        model: 'deepseek-chat',
-      ),
+    _initChains();
+  }
+
+  void reloadConfig() {
+    print("🔄 Reloading LLM Config...");
+    _initChains();
+  }
+
+  void _initChains() {
+    // 1. Load Config
+    try {
+      _currentConfig = PreferenceService().getLLMConfig();
+    } catch (e) {
+      _currentConfig = const LLMConfig();
+    }
+
+    String finalApiKey = _currentConfig.apiKey;
+    String finalBaseUrl = _currentConfig.baseUrl;
+    String finalModel = _currentConfig.modelName;
+
+    // 体验模式 Override
+    if (_currentConfig.mode == AppMode.experience) {
+      finalApiKey = _defaultApiKey; // Use internal limited key
+      finalBaseUrl = 'https://api.deepseek.com';
+      finalModel = 'deepseek-chat';
+    }
+
+    print(
+      "🤖 Initializing LLM: Mode=${_currentConfig.mode}, Provider=${_currentConfig.provider}",
     );
 
-    // 2. 定义 Prompt (Prompt Template)
-    // [LangChain 概念]: ChatPromptTemplate 用于构建发送给 LLM 的消息列表。
-    // 它将静态的指令 (System Prompt) 和动态的用户输入 (Human Prompt) 结合起来。
-    // 其中的 {variable} 是占位符，会在运行时被 .invoke() 传入的参数替换。
+    // 2. 初始化模型 (Chat Model)
+    final model = ChatOpenAI(
+      apiKey: finalApiKey,
+      baseUrl: finalBaseUrl,
+      defaultOptions: ChatOpenAIOptions(temperature: 1.5, model: finalModel),
+    );
+
+    // 3. 定义 Prompt (Prompt Template)
     final promptTemplate = ChatPromptTemplate.fromPromptMessages([
-      // System Message: 设定 AI 的角色和行为规范 (从 config/prompts.dart 读取)
       SystemChatMessagePromptTemplate.fromTemplate(
         AppPrompts.fetchQuoteSystemPrompt,
       ),
-      // Human Message: 用户的实际请求
       HumanChatMessagePromptTemplate.fromTemplate('请赐予我一句智慧。Output JSON only.'),
     ]);
 
-    // 3. 构建 Chain (LCEL - LangChain Expression Language)
-    // [LangChain 概念]: Pipe (|) 运算符
-    // 这行代码展示了 LangChain 最核心的特性：链式调用。
-    // 数据流向: PromptTemplate -> Model -> OutputParser
-    // 1. PromptTemplate 接收参数，生成 List<ChatMessage>
-    // 2. Model 接收消息，调用 API，返回 ChatResult
-    // 3. StringOutputParser 接收 ChatResult，提取出 content 字符串
+    // 4. 构建 Chain
     _stringChain = promptTemplate.pipe(model).pipe(const StringOutputParser());
 
     // --- Philosopher's Chamber: Opening Chain ---
-    // [LangChain 概念]: 不同的任务需要不同的 Chain
-    // 这里我们定义了一个专门用于生成“开场白”的 Prompt
     final openingPrompt = ChatPromptTemplate.fromPromptMessages([
       SystemChatMessagePromptTemplate.fromTemplate(
         AppPrompts.philosopherChamberOpeningSystemPrompt,
@@ -82,38 +86,32 @@ class LLMService {
     _openingChain = openingPrompt.pipe(model).pipe(const StringOutputParser());
 
     // --- Philosopher's Chamber: Chat Chain ---
-    // [LangChain 概念]: 带有历史记录的 Prompt
     final chatPrompt = ChatPromptTemplate.fromPromptMessages([
       SystemChatMessagePromptTemplate.fromTemplate(
         AppPrompts.philosopherChamberChatSystemPrompt,
       ),
-      // [LangChain 概念]: MessagesPlaceholder
-      // 这是一个特殊的占位符，用于插入对话历史 (History)。
-      // 它会被替换为一系列的 ChatMessage 对象 (HumanMessage, AIMessage)。
       MessagesPlaceholder(variableName: 'history'),
       HumanChatMessagePromptTemplate.fromTemplate('{input}'),
     ]);
     _chatChain = chatPrompt.pipe(model).pipe(const StringOutputParser());
   }
 
-  late final Runnable _openingChain;
-  late final Runnable _chatChain;
-
   /// 核心方法：获取一条随机哲学金句
   Future<Quote> fetchRandomQuote() async {
-    // 1. 检查 Key 配置
-    if (_apiKey.isEmpty) {
-      print('⚠️ DEEPSEEK_API_KEY is empty. Using Mock Data.');
-      print(
-        '💡 Tip: Ensure you are using the "Local Debug" configuration in your IDE.',
-      );
+    // 1. 检查 Key 配置 (只在极速模式下检查空 Key)
+    if (_currentConfig.mode == AppMode.speed && _currentConfig.apiKey.isEmpty) {
+      print('⚠️ [Speed Mode] API Key is empty. Using Mock Data.');
       return _fetchMockQuote();
     }
 
-    if (!_apiKey.startsWith('sk-')) {
+    // 检查 API Key 格式 (仅在非体验模式下)
+    if (_currentConfig.mode != AppMode.experience &&
+        !_currentConfig.apiKey.startsWith('sk-')) {
       print('⚠️ API Key format seems invalid (does not start with sk-).');
-    } else {
-      print('✅ API Key detected (prefix: ${_apiKey.substring(0, 5)}...)');
+    } else if (_currentConfig.mode != AppMode.experience) {
+      print(
+        '✅ API Key detected (prefix: ${_currentConfig.apiKey.substring(0, 5)}...)',
+      );
     }
 
     try {
@@ -339,7 +337,8 @@ class LLMService {
 
   /// 生成“密室”开场白
   Future<String> generateOpeningQuestion(Quote quote) async {
-    if (_apiKey.isEmpty) {
+    // 检查 Key
+    if (_currentConfig.mode == AppMode.speed && _currentConfig.apiKey.isEmpty) {
       // Mock Fallback
       await Future.delayed(const Duration(seconds: 1));
       return '你为何因这句话而停留？"${quote.text}"... 是因为你在虚无中感到寒冷了吗？(Mock)';
@@ -365,7 +364,8 @@ class LLMService {
     String input,
     List<Map<String, String>> history,
   ) async {
-    if (_apiKey.isEmpty) {
+    // 检查 Key
+    if (_currentConfig.mode == AppMode.speed && _currentConfig.apiKey.isEmpty) {
       // Mock Fallback
       await Future.delayed(const Duration(seconds: 1));
       return '这是模拟的回复。你的思考很有深度，但我们现在处于离线模式。';

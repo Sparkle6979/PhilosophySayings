@@ -4,6 +4,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../models/quote.dart';
 import '../../services/favorites_service.dart';
 
+import 'philosophers_chamber_page.dart';
+
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({Key? key}) : super(key: key);
 
@@ -300,6 +302,49 @@ class FavoritesPage extends StatelessWidget {
                           ),
                         ),
                       ],
+                      const SizedBox(height: 32),
+
+                      // Anchor Button (Enter Chamber)
+                      Center(
+                        child: SizedBox(
+                          height: 44,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black87,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(22),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close dialog first
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => PhilosophersChamberPage(
+                                    quote: quote,
+                                    initialHistory: null, // Fresh session
+                                    onChatUpdated: (_) {}, // Dummy callback
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.vpn_key_rounded, size: 18),
+                            label: const Text(
+                              "进入密室",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),

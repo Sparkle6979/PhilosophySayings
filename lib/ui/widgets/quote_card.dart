@@ -410,8 +410,42 @@ class QuoteCard extends StatelessWidget {
                               ),
                             ),
                           ],
+                          if (quote.tagline != null) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              quote.tagline!,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.notoSerif(
+                                fontSize: 11,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
 
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 24),
+
+                          // Bio Section (Mobile)
+                          if (quote.bio != null) ...[
+                            Container(
+                              width: 40,
+                              height: 1,
+                              color: Colors.grey[200],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              quote.bio!,
+                              textAlign: TextAlign.justify,
+                              style: GoogleFonts.lato(
+                                fontSize: 12,
+                                height: 1.5,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+
                           const Divider(),
                           const SizedBox(height: 16),
 

@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'ui/pages/home_page.dart';
+import 'ui/pages/onboarding_page.dart';
+import 'services/preference_service.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize PreferenceService
+  final prefs = PreferenceService();
+  await prefs.init();
+
+  runApp(MyApp(isFirstRun: prefs.isFirstRun));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isFirstRun;
+
+  const MyApp({Key? key, required this.isFirstRun}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +30,7 @@ class MyApp extends StatelessWidget {
         // 全局配置 Google Fonts，让整个 App 都有统一的文字风格
         textTheme: GoogleFonts.latoTextTheme(),
       ),
-      home: const HomePage(),
+      home: isFirstRun ? const OnboardingPage() : const HomePage(),
     );
   }
 }
