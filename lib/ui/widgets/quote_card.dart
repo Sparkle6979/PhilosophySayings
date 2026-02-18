@@ -283,6 +283,31 @@ class QuoteCard extends StatelessWidget {
                         ),
                       ],
                     ),
+
+                    // Offline Indicator (Mock Data)
+                    if (quote.isMock) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: Text(
+                          "Offline / 离线",
+                          style: GoogleFonts.lato(
+                            fontSize: 10,
+                            color: Colors.grey[500],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+
                     const SizedBox(height: 16),
 
                     // Explanation Content
@@ -301,15 +326,13 @@ class QuoteCard extends StatelessWidget {
             }
 
             // --- 核心布局逻辑 ---
+            Widget content;
             if (isDesktop) {
               // Magazine Layout Hybrid
-              // Left: Image (Narrower)
-              // Right: Full Content
-              return IntrinsicHeight(
+              content = IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // 左栏 (30%)：变窄，限制图片大小
                     Expanded(
                       flex: 3,
                       child: Container(
@@ -321,10 +344,9 @@ class QuoteCard extends StatelessWidget {
                         ),
                         child: SingleChildScrollView(
                           child: buildProfileContent(),
-                        ), // Allowed to scroll if image is tall
+                        ),
                       ),
                     ),
-                    // 右栏 (70%)：内容丰富
                     Expanded(
                       flex: 7,
                       child: Container(
@@ -342,11 +364,10 @@ class QuoteCard extends StatelessWidget {
               );
             } else {
               // Mobile: Standard
-              return SingleChildScrollView(
+              content = SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Reuse profile content logic partially or custom
                     Container(
                       height: (cardWidth * 0.75).clamp(200.0, 500.0),
                       width: double.infinity,
@@ -360,7 +381,7 @@ class QuoteCard extends StatelessWidget {
                         image: quote.imageUrl != null
                             ? DecorationImage(
                                 image: AssetImage(quote.imageUrl!),
-                                fit: BoxFit.contain, // Mobile keep contain
+                                fit: BoxFit.contain,
                                 alignment: Alignment.center,
                               )
                             : null,
@@ -375,12 +396,10 @@ class QuoteCard extends StatelessWidget {
                             )
                           : null,
                     ),
-
                     Padding(
                       padding: EdgeInsets.all(cardWidth * 0.06),
                       child: Column(
                         children: [
-                          // Quote
                           Text(
                             "“${quote.text}”",
                             textAlign: TextAlign.center,
@@ -391,8 +410,6 @@ class QuoteCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 24),
-
-                          // Author Info
                           Text(
                             quote.author,
                             style: GoogleFonts.notoSerif(
@@ -423,10 +440,7 @@ class QuoteCard extends StatelessWidget {
                               ),
                             ),
                           ],
-
                           const SizedBox(height: 24),
-
-                          // Bio Section (Mobile)
                           if (quote.bio != null) ...[
                             Container(
                               width: 40,
@@ -445,11 +459,8 @@ class QuoteCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 24),
                           ],
-
                           const Divider(),
                           const SizedBox(height: 16),
-
-                          // Explanation Title
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -477,8 +488,6 @@ class QuoteCard extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 16),
-
-                          // Explanation
                           Text(
                             quote.explanation,
                             textAlign: TextAlign.justify,
@@ -494,6 +503,61 @@ class QuoteCard extends StatelessWidget {
                 ),
               );
             }
+
+            // Wrap in Stack for overlay
+            return Stack(
+              children: [
+                content,
+                if (quote.isMock)
+                  Positioned(
+                    top: 16,
+                    right: 16,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(
+                          0.15,
+                        ), // Warm 'Sample' feel
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: Colors.amber.withOpacity(0.5),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.vpn_key_off_rounded,
+                            size: 16,
+                            color: Colors.amber[900],
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            "SAMPLE / 示例",
+                            style: GoogleFonts.oswald(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber[900],
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            );
           },
         ),
       ),

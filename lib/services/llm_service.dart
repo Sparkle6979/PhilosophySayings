@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:langchain/langchain.dart';
@@ -7,12 +6,13 @@ import '../config/prompts.dart'; // 引入配置文件
 import '../models/quote.dart';
 import '../models/llm_config.dart';
 import 'preference_service.dart';
+import '../utils/json_utils.dart';
 
 // Service Layer: 负责所有的数据获取
 class LLMService {
   // DeepSeek Defaults
   static const String _defaultApiKey =
-      ''; // Experience Key - Set this to your shared key
+      ''; // TODO: Enter your API Key here or use Speed Mode
 
   // 最近出现过的哲学家名单 (用于避免短期重复)
   final List<String> _recentAuthors = [];
@@ -59,10 +59,22 @@ class LLMService {
     );
 
     // 2. 初始化模型 (Chat Model)
+    // 2. 初始化模型 (Chat Model)
+    // Determine temperature based on provider
+    double temperature = 0.7; // Default
+    if (_currentConfig.provider == LLMProvider.deepseek) {
+      temperature = 1.5;
+    } else if (_currentConfig.provider == LLMProvider.minimax) {
+      temperature = 1.0;
+    }
+
     final model = ChatOpenAI(
       apiKey: finalApiKey,
       baseUrl: finalBaseUrl,
-      defaultOptions: ChatOpenAIOptions(temperature: 1.5, model: finalModel),
+      defaultOptions: ChatOpenAIOptions(
+        temperature: temperature,
+        model: finalModel,
+      ),
     );
 
     // 3. 定义 Prompt (Prompt Template)
@@ -144,7 +156,10 @@ class LLMService {
       print('📝 Raw Content: $rawContent');
 
       // 手动调用 Parser
-      final Map<String, dynamic> result = _sanitizeAndParseJson(rawContent);
+      // 手动调用 Parser (Refactored to Utils)
+      final Map<String, dynamic> result = JsonUtils.sanitizeAndParseJson(
+        rawContent,
+      );
       print('✅ LLM Response: $result');
 
       // 6. 后处理：本地资产映射
@@ -233,6 +248,8 @@ class LLMService {
 
     final itemWithImage = Map<String, dynamic>.from(randomItem);
     itemWithImage['imageUrl'] = resolvedImage;
+
+    itemWithImage['isMock'] = true; // Mark as mock data
 
     return Quote.fromJson(itemWithImage);
   }
@@ -398,21 +415,5 @@ class LLMService {
       print('Error chatting: $e');
       return '（哲学家陷入了沉思... 似乎信号中断了）';
     }
-  }
-
-  /// 辅助方法：清洗并解析 LLM 返回的 JSON 字符串
-  /// 能够处理 ```json 包裹的代码块
-  Map<String, dynamic> _sanitizeAndParseJson(String raw) {
-    String clean = raw.trim();
-    // 去除 Markdown 代码块标记
-    if (clean.startsWith('```json')) {
-      clean = clean.substring(7);
-    } else if (clean.startsWith('```')) {
-      clean = clean.substring(3);
-    }
-    if (clean.endsWith('```')) {
-      clean = clean.substring(0, clean.length - 3);
-    }
-    return jsonDecode(clean) as Map<String, dynamic>;
   }
 }

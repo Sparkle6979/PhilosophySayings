@@ -164,9 +164,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       onChanged: (value) {
                         if (value != null) {
                           setState(() {
-                            _config = _config.copyWith(provider: value);
+                            // Clear token when switching providers to avoid using wrong key
+                            _apiKeyController.clear();
+                            _config = _config.copyWith(
+                              provider: value,
+                              apiKey: '',
+                            );
                           });
-                          _saveConfig();
+                          // 交互优化：去除自动保存，等待用户手动点击“确认”
                         }
                       },
                     ),
@@ -182,9 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         suffixIcon: Icon(Icons.vpn_key_outlined),
                       ),
                       onChanged: (_) {
-                        // Delay save or save on separate button?
-                        // For simplicity, let's have a manual save button at bottom or save on exit.
-                        // But here we can just update local state and rely on explicit save.
+                        // Manual save only
                       },
                     ),
                     const SizedBox(height: 20),
@@ -192,13 +195,41 @@ class _SettingsPageState extends State<SettingsPage> {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black87,
+                          backgroundColor:
+                              Colors.indigoAccent, // Highlight color
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                          ), // Taller
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 4,
                         ),
-                        onPressed: _saveConfig,
-                        icon: const Icon(Icons.check_circle_outline),
-                        label: const Text("缔结契约 / Seal the Pact"),
+                        onPressed: () {
+                          // Validation Logic
+                          if (_config.mode == AppMode.speed &&
+                              _apiKeyController.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  '⚠️ 请输入 API Key (Token) / Please enter a valid token',
+                                ),
+                                backgroundColor: Colors.orange,
+                              ),
+                            );
+                            return;
+                          }
+                          _saveConfig();
+                        },
+                        icon: const Icon(Icons.check_circle, size: 24),
+                        label: const Text(
+                          "确认 / Confirm",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ],

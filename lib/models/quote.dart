@@ -7,6 +7,7 @@ class Quote {
   final String? bio; // 哲学家生平简介
   final String? lifeYears; // 生卒年 (e.g. 1844-1900)
   final String? theme; // 此次生成的哲学主题 (e.g. 存在主义)
+  final bool isMock; // 是否为降级数据 (Mock/Offline)
 
   Quote({
     required this.text,
@@ -17,6 +18,7 @@ class Quote {
     this.bio,
     this.lifeYears,
     this.theme,
+    this.isMock = false,
   });
 
   // 用于从 JSON (LLM 返回或 DB 读取) 解析数据
@@ -31,6 +33,7 @@ class Quote {
       bio: json['bio'],
       lifeYears: json['life_years'], // 注意 json key 必须对应 prompt 里的 snake_case
       theme: json['theme'],
+      isMock: json['isMock'] ?? false,
     );
   }
 
@@ -44,6 +47,7 @@ class Quote {
       'bio': bio,
       'life_years': lifeYears,
       'theme': theme,
+      'isMock': isMock,
     };
   }
 }

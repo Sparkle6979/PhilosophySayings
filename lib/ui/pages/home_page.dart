@@ -74,15 +74,29 @@ class _HomePageState extends State<HomePage> {
       // 1. 制造“寻觅感” (Artificial Delay)
       // 即使数据已经预加载好了，也强制展示 800ms Loading，让用户感觉“正在寻找”
       final readyFuture = _nextQuoteFuture;
-      _quoteFuture = Future.delayed(
-        const Duration(milliseconds: 800),
-        () async {
-          final quote = await readyFuture;
-          _currentQuote = quote; // Update current quote
-          _isLoading = false; // Reset loading state
-          return quote;
-        },
-      );
+      _quoteFuture = Future.delayed(const Duration(milliseconds: 500), () async {
+        var quote = await readyFuture;
+
+        // Debugging Duplicates:
+        // If pre-loaded quote is identical to current (likely due to race condition in exclusion list),
+        // discard it and fetch a fresh one.
+        if (_currentQuote != null && quote.text == _currentQuote!.text) {
+          print(
+            "⚠️ Duplicate quote detected (Pre-load race condition). Fetching fresh...",
+          );
+          try {
+            // Forced fresh fetch
+            quote = await _llmService.fetchRandomQuote();
+          } catch (e) {
+            print("❌ Failed to fetch fresh quote on duplicate: $e");
+            rethrow;
+          }
+        }
+
+        _currentQuote = quote; // Update current quote
+        _isLoading = false; // Reset loading state
+        return quote;
+      });
 
       // 2. 立即开始预加载下一条 (在后台进行)
       _nextQuoteFuture = _llmService.fetchRandomQuote();
@@ -260,29 +274,46 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
 
-                // 2. 底部操作栏 (Action Bar)
+                // 2. 底部悬浮胶囊栏 (Floating Capsule Bar)
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: 30,
-                    right: 30,
-                    top: 18,
-                    bottom: 18, // Reduced from 20 to 10 to be "lower"
-                  ),
-                  child: ListenableBuilder(
-                    listenable: FavoritesService(),
-                    builder: (context, _) {
-                      final isFav = FavoritesService().isFavorite(
-                        snapshot.data!,
-                      );
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // 左侧：共鸣按钮 (Resonate / Like)
-                          SizedBox(
-                            height: 40,
-                            child: FloatingActionButton.extended(
-                              heroTag: "like",
-                              onPressed: () {
+                  padding: const EdgeInsets.only(bottom: 30, top: 10),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(
+                        0.95,
+                      ), // High opacity for contrast
+                      borderRadius: BorderRadius.circular(50), // Capsule shape
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: ListenableBuilder(
+                      listenable: FavoritesService(),
+                      builder: (context, _) {
+                        final isFav = FavoritesService().isFavorite(
+                          snapshot.data!,
+                        );
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Left: Like
+                            _buildCapsuleAction(
+                              icon: isFav
+                                  ? Icons.favorite
+                                  : Icons.favorite_border_rounded,
+                              label: isFav ? "已共鸣" : "共鸣",
+                              color: isFav ? Colors.redAccent : Colors.black87,
+                              onTap: () {
                                 if (isFav) {
                                   FavoritesService().remove(snapshot.data!);
                                 } else {
@@ -292,49 +323,28 @@ class _HomePageState extends State<HomePage> {
                                       content: Text("已收藏到心中的圣殿"),
                                       duration: Duration(milliseconds: 1500),
                                       behavior: SnackBarBehavior.floating,
-                                      width: 400,
+                                      width: 300,
                                     ),
                                   );
                                 }
                               },
-                              backgroundColor: isFav
-                                  ? Colors.redAccent
-                                  : Colors.white,
-                              foregroundColor: isFav
-                                  ? Colors.white
-                                  : Colors.redAccent,
-                              elevation: 2,
-                              extendedPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              icon: Icon(
-                                isFav
-                                    ? Icons.favorite
-                                    : Icons.favorite_border_rounded,
-                                size: 18,
-                              ),
-                              label: Text(
-                                isFav ? "已共鸣" : "共鸣",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
                             ),
-                          ),
 
-                          // 中间：密室锚点 (Anchor / Chamber) - Primary Action
-                          SizedBox(
-                            height: 40,
-                            child: FloatingActionButton.extended(
-                              heroTag: "anchor",
-                              onPressed: () {
+                            // Center: Anchor (Primary)
+                            Container(
+                              height: 36, // Vertical divider
+                              width: 1,
+                              color: Colors.black12,
+                            ),
+
+                            _buildCapsuleAction(
+                              icon: Icons.vpn_key_rounded,
+                              label: "锚定",
+                              isPrimary: true,
+                              onTap: () {
                                 if (snapshot.data == null) return;
                                 final quote = snapshot.data!;
-                                // Retrieve existing history or null
-                                // [持久化逻辑]: 在进入密室前，先检查 memory 中是否有这句名言的聊天记录
                                 final history = _chatHistories[quote.text];
-
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
                                     pageBuilder:
@@ -344,9 +354,8 @@ class _HomePageState extends State<HomePage> {
                                           secondaryAnimation,
                                         ) => PhilosophersChamberPage(
                                           quote: quote,
-                                          initialHistory: history, // 将历史记录传入子页面
+                                          initialHistory: history,
                                           onChatUpdated: (newHistory) {
-                                            // [状态同步]: 子页面 (ChamberPage) 产生新消息时，回调此函数更新父页面状态
                                             _chatHistories[quote.text] =
                                                 newHistory;
                                           },
@@ -363,59 +372,27 @@ class _HomePageState extends State<HomePage> {
                                             child: child,
                                           );
                                         },
-                                    transitionDuration: const Duration(
-                                      milliseconds: 800,
-                                    ),
                                   ),
                                 );
                               },
-                              backgroundColor:
-                                  Colors.white, // Reverted to white
-                              foregroundColor: Colors.black87,
-                              elevation: 2,
-                              extendedPadding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                              ),
-                              icon: const Icon(Icons.vpn_key_rounded, size: 18),
-                              label: const Text(
-                                "锚定",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              tooltip: "进入密室",
                             ),
-                          ),
 
-                          // 右侧：再探索按钮 (Explore / Search) - Secondary
-                          SizedBox(
-                            height: 40,
-                            child: FloatingActionButton.extended(
-                              heroTag: "explore",
-                              onPressed: _loadNewQuote,
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black87,
-                              elevation: 2,
-                              extendedPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              icon: const Icon(
-                                Icons.explore_outlined,
-                                size: 18,
-                              ),
-                              label: const Text(
-                                "寻觅",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                ),
-                              ),
+                            Container(
+                              height: 36, // Vertical divider
+                              width: 1,
+                              color: Colors.black12,
                             ),
-                          ),
-                        ],
-                      );
-                    },
+
+                            // Right: Explore
+                            _buildCapsuleAction(
+                              icon: Icons.explore_outlined,
+                              label: "寻觅",
+                              onTap: _loadNewQuote,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -424,6 +401,39 @@ class _HomePageState extends State<HomePage> {
 
           return const SizedBox();
         },
+      ),
+    );
+  }
+
+  Widget _buildCapsuleAction({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color color = Colors.black87,
+    bool isPrimary = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20, color: isPrimary ? Colors.black : color),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: isPrimary ? FontWeight.w900 : FontWeight.w600,
+                color: isPrimary ? Colors.black : color.withOpacity(0.8),
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
