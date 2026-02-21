@@ -5,75 +5,52 @@ An immersive, aesthetically pleasing Flutter application that delivers daily phi
 ## 🌟 Features
 
 ### Core Experience
-*   **Daily Wisdom**: Display curated quotes from great philosophers (e.g., Nietzsche, Camus).
+*   **Daily Wisdom**: Display curated quotes from great philosophers (e.g., Nietzsche, Camus, Heidegger).
 *   **Deep Explanation (哲言妄解)**: Poetic and insightful breakdowns of the meaning behind each quote.
-*   **Existentialism Bias**: Optimized prompts to explore themes of modern nihilsm, focus on Nietzsche, Camus, Heidegger, Sartre, and Kierkegaard.
-*   **DeepSeek Integration**: Powered by the DeepSeek-V3/R1 model for profound, nuanced philosophical generation.
+*   **Existentialism Bias**: Optimized prompts to explore themes of modern nihilism, focus on existentialists and classical thinkers.
+*   **Dynamic Assets System**: Smart mapping of philosopher names to local asset images with random high-quality variations.
+*   **Offline First / Degradation**: Graceful fallback to rich mock data ("SAMPLE / 示例" indicator) when offline or when API tokens are unavailable.
 
 ### The Philosopher's Chamber (哲学家的密室)
-*   **Immersive Chat**: Step into a private "chamber" to converse directly with the philosopher who authored the quote.
-*   **Persona Engine**: Each philosopher has a distinct personality (Prompt Engineering via `lib/config/prompts.dart`).
+*   **Immersive Chat**: Step into a private "chamber" (dark aesthetic UI) to converse directly with the philosopher who authored the quote.
+*   **Persona Engine**: Each philosopher has a distinct personality driven by LangChain.dart (`lib/config/prompts.dart`).
 *   **Contextual Opening**: The philosopher initiates the conversation based on the specific quote you are viewing.
-*   **Persistence**: Chat sessions are saved per quote, allowing you to leave and return to the conversation later.
+*   **Session Persistence**: Chat history is preserved per quote during the app session (State Lifting).
 
-### Utilities
-*   **Echoes of the Soul (收藏夹)**: A dedicated space to revisit your collected wisdom, featuring a bilingual "Masonry" grid layout.
-*   **Share as Image**: Convert your current wisdom into a beautiful image card for social sharing.
-*   **Dynamic Assets**: Smart mapping of philosopher names to local asset images.
+### Utilities & UX
+*   **Echoes of the Soul (收藏夹)**: A dedicated space to revisit your collected wisdom, featuring a masonry grid layout and SQLite persistence.
+*   **Share as Image**: Convert your current wisdom into a beautiful image card for social sharing (`RepaintBoundary`).
+*   **Adaptive Layouts**: Seamlessly switches between Magazine-style (Desktop/Tablet) and standard cards (Mobile).
 
-## 🛠 Tech Stack
-*   **Framework**: Flutter (Dart)
-*   **AI Engine**: LangChain.dart + DeepSeek API
-*   **State Management**: `Provider` + `State Lifting`
-*   **Persistence**: `shared_preferences` (Settings) + In-Memory Map (Chat History) -> *SQLite planned for future*
-*   **UI/UX**: Custom Animations (Breathing Pulse), Glassmorphism, Adaptive Layouts.
+## 🏗 Architecture (Semantic Layering)
 
----
+The codebase is organized following a robust semantic separation of concerns:
+*   `lib/config/`: Configuration files and decoupled AI Prompts (`prompts.dart`).
+*   `lib/models/`: Pure Dart data structures (`quote.dart`, `llm_config.dart`).
+*   `lib/services/`: Core business logic decoupled from the UI:
+    *   `llm_service.dart`: LangChain integration and LLM pipelines.
+    *   `database_helper.dart` & `favorites_service.dart`: SQLite Local Storage.
+    *   `preference_service.dart`: SharedPreferences for settings.
+*   `lib/ui/pages/`: Main screens (`home_page.dart`, `settings_page.dart`, `philosophers_chamber_page.dart`).
+*   `lib/ui/widgets/`: Reusable UI components (`quote_card.dart`).
+*   `lib/utils/`: Pure helper functions (`json_utils.dart` for robust AST-level JSON JSON repair).
 
-## 📅 Development Status
-
-### Phase 1: Foundation (DONE ✅)
-*   [x] **AI Integration**: Connected `LLMService` to DeepSeek via LangChain.dart.
-*   [x] **Content Filtering**: Implemented "Recent History" tracking to avoid duplicate authors and quotes.
-*   [x] **Refined Prompts**: Extracted all system prompts to `lib/config/prompts.dart` for easy tuning.
-
-### Phase 2: Design & Aesthetics (DONE ✅)
-*   [x] **Visual Identity**: Implemented "Rugged Romantic" theme with `IM Fell English SC` typography.
-*   [x] **Animations**: Added "Philosophical Pulse" loading animation.
-*   [x] **Adaptive UI**: Responsive layouts for both Mobile and Desktop.
-
-### Phase 3: The "Consultation Room" (DONE ✅)
-*   [x] **Philosopher's Chamber**: Full chat interface with streaming-like UX.
-*   [x] **Session Persistence**: Chat history is preserved during the app session.
-
----
+*(Note: Key sections of the code, especially LangChain logic and State Management, contain detailed Chinese educational comments to aid developers new to these frameworks.)*
 
 ## 🚀 Getting Started
 
 1.  **Prerequisites**: Flutter SDK installed.
-2.  **API Key Setup**:
-    Get your API Key from [DeepSeek Platform](https://platform.deepseek.com/).
-    
-    You have two options to inject the key:
-
-    **Option A: Command Line (Recommended)**
-    ```bash
-    flutter run --dart-define=DEEPSEEK_API_KEY=your_actual_key_here
-    ```
-
-    **Option B: Environment Variable (VS Code)**
-    Add this to your `.vscode/launch.json`:
-    ```json
-    "args": [
-        "--dart-define=DEEPSEEK_API_KEY=your_actual_key_here"
-    ]
-    ```
-
-3.  **Run**:
+2.  **Run the App**:
     ```bash
     flutter pub get
-    flutter run -d macos
+    flutter run
     ```
+3.  **API Key Setup (Speed Mode)**:
+    By default, the app uses limited "Mock Data". To experience the real AI:
+    *   Go to **Settings** (Gear Icon on Home Page).
+    *   Switch to **Speed Mode**.
+    *   Select your provider (DeepSeek, Qwen, MiniMax) and enter your API Key.
+    *   Your API Key is safely stored locally via `SharedPreferences`.
 
 ---
 *Created with ❤️ by Antigravity & Sparkle79*

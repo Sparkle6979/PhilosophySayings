@@ -17,19 +17,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // 服务层依赖 (Service Dependencies)
+  // 此处将负责与大语言模型 (LLM) 通信的逻辑全部封装在了 LLMService 中，
+  // 使得 UI 层代码与业务逻辑解耦，代码更干净。
   final LLMService _llmService = LLMService();
-  final GlobalKey _quoteCardKey = GlobalKey(); // Key for capturing image
+
+  // 用于截图分享功能的 GlobalKey，通过它能够抓取对应的 Widget 并生成图片。
+  final GlobalKey _quoteCardKey = GlobalKey();
+
   bool _isLoading = false;
   Quote? _currentQuote;
-  // Store chat history for each quote to persist session
-  // State Lifting: 将聊天记录提升到 HomePage 管理
-  // Key: Quote.text (名言内容作为唯一标识)
+
+  // --- 状态提升 (State Lifting) ---
+  // 将原属于 "密室页面" (PhilosophersChamberPage) 的聊天记录状态提升到了 HomePage。
+  // 这样做的目的是：当用户从密室返回首页后，聊天记录并不会因为密室页面的销毁而丢失。
+  // Key: Quote.text (用名言文本作为唯一标识)
   // Value: 聊天记录列表
   final Map<String, List<Map<String, String>>> _chatHistories = {};
 
-  // Future 用于存储异步操作的状态
+  // --- 异步状态管理 ---
+  // Future 是 Dart 中处理异步操作的核心机制。
+  // _quoteFuture：表示当前正在屏幕上显示（或正在加载准备显示）的名言。
+  // _nextQuoteFuture：这是一种【预加载思想】。在用户阅读当前名言时，后台已经开始默默请求下一条了。
+  // 这样当用户点击“寻觅”时，能瞬间完成切换，极大提升了流畅体验。
   late Future<Quote> _quoteFuture;
-  late Future<Quote> _nextQuoteFuture; // 预加载的下一条
+  late Future<Quote> _nextQuoteFuture;
 
   @override
   void initState() {

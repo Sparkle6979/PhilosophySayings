@@ -21,12 +21,19 @@ class PhilosophersChamberPage extends StatefulWidget {
 }
 
 class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
+  // --- UI 控制器 (Controllers) ---
+  // TextEditingController 用于读取和清空输入框。
+  // ScrollController 用于在收到新消息时，自动将聊天列表滚动到底部。
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final LLMService _llmService = LLMService();
-  final List<Map<String, String>> _messages = []; // 'role': 'user'/'assistant'
-  bool _isTyping = true; // Initially true as the philosopher speaks first
-  bool _showIntro = true; // Control the entrance animation
+
+  // 聊天记录存储。格式与 LangChain 期望的结构相似：[{'role': 'user', 'content': '...'}, ...]
+  final List<Map<String, String>> _messages = [];
+
+  // 状态变量
+  bool _isTyping = true; // 最初为 true，因为设定是“哲学家主动先开口”
+  bool _showIntro = true; // 控制“正在进入密室”全屏动画的显示与淡出
 
   @override
   void initState() {
@@ -93,13 +100,15 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
     if (_textController.text.trim().isEmpty) return;
 
     final text = _textController.text;
-    _textController.clear();
+    _textController.clear(); // 发送后立即清空输入框，提升体验
 
-    // Optimistic UI Update: 先显示用户消息，无需等待 LLM
+    // --- 乐观 UI 更新 (Optimistic UI Update) ---
+    // 即使还没有收到大模型回复，也先将用户的消息上屏，
+    // 让界面显得极其响应迅速，不卡顿。
     setState(() {
       _messages.add({'role': 'user', 'content': text});
-      _isTyping = true; // 显示 "Thinking..." 状态
-      widget.onChatUpdated(_messages); // Sync update
+      _isTyping = true; // 显示 "Thinking..." 等待动画
+      widget.onChatUpdated(_messages); // [状态提升] 同步更新首页的缓存
     });
     _scrollToBottom();
 

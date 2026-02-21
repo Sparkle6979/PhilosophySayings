@@ -1,11 +1,16 @@
 import 'dart:convert';
 
 class JsonUtils {
-  /// Cleans and parses a JSON string returned by an LLM.
+  /// 核心工具类：清理并解析 LLM 返回的 JSON 字符串。
   ///
-  /// Uses a robust 2-step strategy:
-  /// 1. Stack-based extraction: Finds the outer-most JSON object/list to ignore conversational text.
-  /// 2. Smart Quote Fallback: If standard parsing fails, attempts to replace Chinese smart quotes with standard quotes.
+  /// 【大模型开发的痛点】：即使在 Prompt 里强调 "Output JSON only"，大模型 (尤其是参数较小的廉价模型)
+  /// 经常会混杂 Markdown 代码块 (```json ... ```)、前言后语 (如"好的，以下是：")，
+  /// 甚至在生成内部双引号时忘记转义，导致标准的 `jsonDecode` 直接崩溃。
+  ///
+  /// 为了解决这个工程难题，我们实行 3 级柔性容错策略：
+  /// 1. Stack-based 括号匹配：精准剥离首尾的多余聊天废话。
+  /// 2. 中文弯引号替换：修复模型自作聪明把 JSON 结构的双引号写成中文双引号的错误。
+  /// 3. Mask-Protect-Restore (掩码-保护-还原) 算法：专门修复【未转义的内部双引号】带来的致命结构破坏。
   static Map<String, dynamic> sanitizeAndParseJson(String raw) {
     // 1. Find JSON start (first '{' or '[')
     int start = -1;

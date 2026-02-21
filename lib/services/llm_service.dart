@@ -21,9 +21,12 @@ class LLMService {
   // 最近出现过的名言内容 (用于避免内容重复)
   final List<String> _recentQuotes = [];
 
-  late Runnable _stringChain;
-  late Runnable _openingChain;
-  late Runnable _chatChain;
+  // --- LangChain 核心概念讲解 ---
+  // Runnable: LangChain 中的标准可执行单元。它可以是一个链条 (Chain)、一个提示词模板 (PromptTemplate) 或一个模型 (Model)。
+  // 通过 .pipe() 方法，我们可以将多个 Runnable 组合成一个新的、更大的 Runnable。
+  late Runnable _stringChain; // 用于获取名言的 Chain，最终输出字符串 (String)
+  late Runnable _openingChain; // 用于生成密室开场白的 Chain
+  late Runnable _chatChain; // 用于在密室中持续对话的 Chain
   late LLMConfig _currentConfig;
 
   LLMService() {
@@ -77,7 +80,9 @@ class LLMService {
       ),
     );
 
-    // 3. 定义 Prompt (Prompt Template)
+    // 3. 定义 Prompt (PromptTemplate - 提示词模板)
+    // 提示词模板就像是一个填空题，我们在运行时把变量（如 {input}, {excluded_authors}）填进去，
+    // 组装成一段完整的对话历史交由大模型处理。
     final promptTemplate = ChatPromptTemplate.fromPromptMessages([
       SystemChatMessagePromptTemplate.fromTemplate(
         AppPrompts.fetchQuoteSystemPrompt,
@@ -85,10 +90,12 @@ class LLMService {
       HumanChatMessagePromptTemplate.fromTemplate('请赐予我一句智慧。Output JSON only.'),
     ]);
 
-    // 4. 构建 Chain
+    // 4. 构建 Chain (将多个组件用管道串联起来)
+    // 这里的 .pipe() 就像是流水线：
+    // PromptTemplate 填好词 -> 传给 -> Model 生成回复 -> 传给 -> StringOutputParser 提取文本。
     _stringChain = promptTemplate.pipe(model).pipe(const StringOutputParser());
 
-    // --- Philosopher's Chamber: Opening Chain ---
+    // --- Philosopher's Chamber: Opening Chain (密室开场白流水线) ---
     final openingPrompt = ChatPromptTemplate.fromPromptMessages([
       SystemChatMessagePromptTemplate.fromTemplate(
         AppPrompts.philosopherChamberOpeningSystemPrompt,
@@ -97,11 +104,13 @@ class LLMService {
     ]);
     _openingChain = openingPrompt.pipe(model).pipe(const StringOutputParser());
 
-    // --- Philosopher's Chamber: Chat Chain ---
+    // --- Philosopher's Chamber: Chat Chain (密室对话流水线) ---
     final chatPrompt = ChatPromptTemplate.fromPromptMessages([
       SystemChatMessagePromptTemplate.fromTemplate(
         AppPrompts.philosopherChamberChatSystemPrompt,
       ),
+      // MessagesPlaceholder 是一个动态占位符，用来插入一连串的历史消息对象 (ChatMessages)
+      // 这让大模型能够“记住”之前的聊天记录。
       MessagesPlaceholder(variableName: 'history'),
       HumanChatMessagePromptTemplate.fromTemplate('{input}'),
     ]);
@@ -145,6 +154,8 @@ class LLMService {
       print('🚫 Excluded Quotes: $excludedQuotesStr');
 
       print('🚀 Sending request to LLM...');
+      // invoke(): 这是 Runnable 执行的方法。我们将字典包裹的变量传进去，
+      // 它会经历 Prompt -> Model -> OutputParser，最后吐出结果。
       final String rawContent =
           await _stringChain.invoke({
                 'excluded_authors': excludedAuthorsStr,
@@ -155,14 +166,14 @@ class LLMService {
 
       print('📝 Raw Content: $rawContent');
 
-      // 手动调用 Parser
-      // 手动调用 Parser (Refactored to Utils)
+      // 手动调用 Parser 解析 JSON: 从模型返回的一堆混杂文字中，提取合法的 JSON，
+      // 并防止因为模型产生的奇怪的特殊符号导致解析崩溃。
       final Map<String, dynamic> result = JsonUtils.sanitizeAndParseJson(
         rawContent,
       );
       print('✅ LLM Response: $result');
 
-      // 6. 后处理：本地资产映射
+      // 6. 后处理：本地资产映射 (查找对应的画像)
       final authorName = result['author'] as String;
       final newTheme = result['theme'] as String?;
 
@@ -389,11 +400,8 @@ class LLMService {
     }
 
     try {
-      // Convert history map to LangChain Message objects
-      // Note: This is a simplified conversion. For robust history, use proper Message classes.
-      // But passing raw input/history logic might differ based on LangChain Dart version.
-      // LangChain Dart: MessagesPlaceholder expects a list of ChatMessage.
-
+      // 将自定义的 Map 聊天记录转换成 LangChain 专用的 ChatMessage 对象列表。
+      // 模型只有通过区分 Human(人) 和 AI(机器) 角色，才能正确理解上下文对话走向。
       final List<ChatMessage> chatHistory = history.map((msg) {
         if (msg['role'] == 'user') {
           return ChatMessage.humanText(msg['content']!);
@@ -402,12 +410,14 @@ class LLMService {
         }
       }).toList();
 
+      // 执行含有历史记录的聊天流水线
       final res = await _chatChain.invoke({
         'author': quote.author,
         'bio': quote.bio,
         'tagline': quote.tagline,
         'quote': quote.text,
-        'history': chatHistory,
+        'history':
+            chatHistory, // 将上面的 List<ChatMessage> 传递给 MessagesPlaceholder
         'input': input,
       });
       return res.toString();
