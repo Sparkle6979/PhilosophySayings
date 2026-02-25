@@ -33,7 +33,8 @@ class Quote {
       bio: json['bio'],
       lifeYears: json['life_years'], // 注意 json key 必须对应 prompt 里的 snake_case
       theme: json['theme'],
-      isMock: json['isMock'] ?? false,
+      // Handle both boolean (from LLM) and integer (from SQLite) for isMock
+      isMock: json['isMock'] == true || json['isMock'] == 1,
     );
   }
 
@@ -47,7 +48,7 @@ class Quote {
       'bio': bio,
       'life_years': lifeYears,
       'theme': theme,
-      'isMock': isMock,
+      'isMock': isMock ? 1 : 0, // SQLite doesn't have native bool, use INTEGER
     };
   }
 }

@@ -12,7 +12,7 @@ import '../utils/json_utils.dart';
 class LLMService {
   // DeepSeek Defaults
   static const String _defaultApiKey =
-      ''; // TODO: Enter your API Key here or use Speed Mode
+      'YOUR_API_KEY_HERE'; // TODO: Enter your API Key here or use Speed Mode
 
   // 最近出现过的哲学家名单 (用于避免短期重复)
   final List<String> _recentAuthors = [];
@@ -28,6 +28,8 @@ class LLMService {
   late Runnable _openingChain; // 用于生成密室开场白的 Chain
   late Runnable _chatChain; // 用于在密室中持续对话的 Chain
   late LLMConfig _currentConfig;
+  late String _activeModel;
+  late String _activeBaseUrl;
 
   LLMService() {
     _initChains();
@@ -47,36 +49,28 @@ class LLMService {
     }
 
     String finalApiKey = _currentConfig.apiKey;
-    String finalBaseUrl = _currentConfig.baseUrl;
-    String finalModel = _currentConfig.modelName;
+    _activeBaseUrl = _currentConfig.baseUrl;
+    _activeModel = _currentConfig.modelName;
 
     // 体验模式 Override
     if (_currentConfig.mode == AppMode.experience) {
       finalApiKey = _defaultApiKey; // Use internal limited key
-      finalBaseUrl = 'https://api.deepseek.com';
-      finalModel = 'deepseek-chat';
+      _activeBaseUrl = 'https://api.deepseek.com';
+      _activeModel = 'deepseek-chat';
     }
 
     print(
-      "🤖 Initializing LLM: Mode=${_currentConfig.mode}, Provider=${_currentConfig.provider}",
+      "🤖 Initializing LLM: Mode=${_currentConfig.mode}, Provider=${_currentConfig.provider} -> Actual Endpoint: $_activeBaseUrl, Actual Model: $_activeModel",
     );
 
     // 2. 初始化模型 (Chat Model)
-    // 2. 初始化模型 (Chat Model)
-    // Determine temperature based on provider
-    double temperature = 0.7; // Default
-    if (_currentConfig.provider == LLMProvider.deepseek) {
-      temperature = 1.5;
-    } else if (_currentConfig.provider == LLMProvider.minimax) {
-      temperature = 1.0;
-    }
-
     final model = ChatOpenAI(
       apiKey: finalApiKey,
-      baseUrl: finalBaseUrl,
+      baseUrl: _activeBaseUrl,
       defaultOptions: ChatOpenAIOptions(
-        temperature: temperature,
-        model: finalModel,
+        temperature: _currentConfig.effectiveTemperature,
+        model: _activeModel,
+        maxTokens: _currentConfig.effectiveMaxTokens,
       ),
     );
 
@@ -153,8 +147,9 @@ class LLMService {
       print('🚫 Excluded Themes: $excludedThemesStr');
       print('🚫 Excluded Quotes: $excludedQuotesStr');
 
-      print('🚀 Sending request to LLM...');
-      // invoke(): 这是 Runnable 执行的方法。我们将字典包裹的变量传进去，
+      print(
+        '🚀 Sending request to LLM [Actual Model: $_activeModel]...',
+      ); // invoke(): 这是 Runnable 执行的方法。我们将字典包裹的变量传进去，
       // 它会经历 Prompt -> Model -> OutputParser，最后吐出结果。
       final String rawContent =
           await _stringChain.invoke({
@@ -171,30 +166,33 @@ class LLMService {
       final Map<String, dynamic> result = JsonUtils.sanitizeAndParseJson(
         rawContent,
       );
-      print('✅ LLM Response: $result');
-
-      // 6. 后处理：本地资产映射 (查找对应的画像)
+      print(
+        '✅ LLM Response [Actual Model: $_activeModel]: $result',
+      ); // 6. 后处理：本地资产映射 (查找对应的画像)
       final authorName = result['author'] as String;
       final newTheme = result['theme'] as String?;
 
       // 智能解析图片
       final resolvedImage = await _resolveImageUrl(authorName);
 
-      // --- 更新历史记录 ---
+      // --- 更新历史记录 (LRU Cache 逻辑，防止 Race Condition 导致重复) ---
       // Authors
+      _recentAuthors.remove(authorName);
       _recentAuthors.add(authorName);
-      if (_recentAuthors.length > 5) _recentAuthors.removeAt(0);
+      if (_recentAuthors.length > 8) _recentAuthors.removeAt(0);
 
       // Themes
       if (newTheme != null && newTheme.isNotEmpty) {
+        _recentThemes.remove(newTheme);
         _recentThemes.add(newTheme);
-        if (_recentThemes.length > 4) _recentThemes.removeAt(0); // 记住最近 4 个主题
+        if (_recentThemes.length > 4) _recentThemes.removeAt(0);
       }
 
       // Quotes
       final quoteText = result['text'] as String;
+      _recentQuotes.remove(quoteText);
       _recentQuotes.add(quoteText);
-      if (_recentQuotes.length > 20) _recentQuotes.removeAt(0); // 记住最近 15 条名言
+      if (_recentQuotes.length > 25) _recentQuotes.removeAt(0); // 记住最近 25 条名言
       // ------------------
 
       // 合并数据
@@ -319,6 +317,20 @@ class LLMService {
       '胡塞尔': 'husserl',
       'wittgenstein': 'wittgenstein',
       '维特根斯坦': 'wittgenstein',
+      'protagoras': 'protagoras',
+      '普罗泰戈拉': 'protagoras',
+      'thrasymachus': 'thrasymachus',
+      '色拉叙马霍斯': 'thrasymachus',
+      'russell': 'russell',
+      '罗素': 'russell',
+      'hume': 'hume',
+      '休谟': 'hume',
+      'einstein': 'einstein',
+      '爱因斯坦': 'einstein',
+      'luxun': 'luxun',
+      '鲁迅': 'luxun',
+      'dostoevsky': 'dostoevsky',
+      '陀思妥耶夫斯基': 'dostoevsky',
     };
 
     String? prefix;
@@ -373,12 +385,16 @@ class LLMService {
     }
 
     try {
+      print(
+        '🗣️ Generating opening question via LLM [Actual Model: $_activeModel]...',
+      );
       final res = await _openingChain.invoke({
         'author': quote.author,
         'bio': quote.bio,
         'tagline': quote.tagline,
         'quote': quote.text,
       });
+      print('✅ Opening generated: $res');
       return res.toString();
     } catch (e) {
       print('Error generating opening: $e');
@@ -410,6 +426,9 @@ class LLMService {
         }
       }).toList();
 
+      print(
+        '🗣️ Chatting with philosopher via LLM [Actual Model: $_activeModel]...',
+      );
       // 执行含有历史记录的聊天流水线
       final res = await _chatChain.invoke({
         'author': quote.author,
@@ -420,6 +439,7 @@ class LLMService {
             chatHistory, // 将上面的 List<ChatMessage> 传递给 MessagesPlaceholder
         'input': input,
       });
+      print('✅ Chat response received: $res');
       return res.toString();
     } catch (e) {
       print('Error chatting: $e');

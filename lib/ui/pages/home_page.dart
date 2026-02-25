@@ -359,6 +359,9 @@ class _HomePageState extends State<HomePage> {
                                 final history = _chatHistories[quote.text];
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
+                                    transitionDuration: const Duration(
+                                      milliseconds: 1000,
+                                    ), // Slower, deeper transition
                                     pageBuilder:
                                         (
                                           context,

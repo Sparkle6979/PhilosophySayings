@@ -158,7 +158,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         DropdownMenuItem(
                           value: LLMProvider.minimax,
-                          child: Text("Minimax (海螺)"),
+                          child: Text('Minimax (海螺)'),
+                        ),
+                        DropdownMenuItem(
+                          value: LLMProvider.moonshot,
+                          child: Text('Moonshot (Kimi)'),
                         ),
                       ],
                       onChanged: (value) {
@@ -238,11 +242,20 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
 
-          // Debug Reset Button (Moved to end of list)
+          // Restart Journey Button
           const SizedBox(height: 40),
           SafeArea(
-            child: Center(
-              child: TextButton(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black54,
+                  side: const BorderSide(color: Colors.black26),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 onPressed: () async {
                   // Reset First Run Flag
                   final prefs = await SharedPreferences.getInstance();
@@ -250,7 +263,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('已重置引导，即将重启...')),
+                      const SnackBar(content: Text('已重置指引，即将重新开始旅程...')),
                     );
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => const OnboardingPage()),
@@ -258,9 +271,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                   }
                 },
-                child: const Text(
-                  "[Debug] 重置首次引导",
-                  style: TextStyle(color: Colors.redAccent, fontSize: 12),
+                icon: const Icon(Icons.restart_alt_rounded, size: 20),
+                label: const Text(
+                  "重启旅程 (Reset Guide)",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1.0,
+                  ),
                 ),
               ),
             ),

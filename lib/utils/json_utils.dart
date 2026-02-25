@@ -125,9 +125,30 @@ class JsonUtils {
 
           return _parseJsonContent(heuristic);
         } catch (e3) {
-          print('❌ JSON Parse Error (Final): $e3');
-          print('📝 Extracted content was: $content');
-          rethrow;
+          // Strategy D: Handle Single-Quoted JSON Keys/Values (Moonshot edge case)
+          // Some models ignore the prompt entirely and output {'key': 'value'}
+          try {
+            print(
+              '⚠️ Strategy C failed ($e3). Trying Strategy D (Single to Double Quotes)...',
+            );
+            // Replace ' with " ONLY if it looks like a structural JSON part
+            // Match: {'  ',  ':  ['  ']
+            String singleQuoteFixed = content;
+            singleQuoteFixed = singleQuoteFixed.replaceAll(
+              RegExp(r"(?<=[{\[,:\s])'(?=\s*[^:,\}\]])"),
+              '"',
+            ); // Start quote
+            singleQuoteFixed = singleQuoteFixed.replaceAll(
+              RegExp(r"(?<=[^\{\[\s])'(?=\s*[:,\]}])"),
+              '"',
+            ); // End quote
+
+            return _parseJsonContent(singleQuoteFixed);
+          } catch (e4) {
+            print('❌ JSON Parse Error (Final): $e4');
+            print('📝 Extracted content was: $content');
+            rethrow;
+          }
         }
       }
     }

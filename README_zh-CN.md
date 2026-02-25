@@ -1,4 +1,4 @@
-# Philosophy Sayings (全知之海)
+# 沉思室 (Philosophy Sayings)
 
 一款沉浸式、极具美感的 Flutter 应用程序，为您提供每日哲学名言，并配以由 AI 驱动的深度解读。
 
@@ -9,6 +9,7 @@
 *   **哲言妄解 (Deep Explanation)**: 对每句名言背后的含义进行富有诗意和深刻的解构。
 *   **存在主义偏好 (Existentialism Bias)**: 优化的提示词，重点探索现代虚无主义主题，聚焦于存在主义者和古典思想家。
 *   **动态资产系统 (Dynamic Assets System)**: 智能地将哲学家名字映射到本地图片资源，并附带随机的高质量变体。
+*   **多模型支持 (Multi-Model Support)**: 集成了国内顶尖大语言模型能力，包含 DeepSeek, 通义千问 (Qwen), MiniMax, 以及 月之暗面 (Moonshot/Kimi)。
 *   **离线优先 / 优雅降级 (Offline First / Degradation)**: 当无网络或 API Token 耗尽时，优雅地降级至丰富的本地模拟数据（带有 "SAMPLE / 示例" 标识）。
 
 ### 哲学家的密室 (The Philosopher's Chamber)
@@ -20,7 +21,8 @@
 ### 实用工具与交互体验 (Utilities & UX)
 *   **灵魂回音 (收藏夹 / Echoes of the Soul)**: 一个专门用来重温您收集的智慧的空间，采用瀑布流布局并支持 SQLite 本地持久化。
 *   **分享为图片 (Share as Image)**: 将当前的智慧语录转化为精美的图文卡片，以便在社交媒体分享 (`RepaintBoundary`)。
-*   **自适应布局 (Adaptive Layouts)**: 在杂志风格（桌面/平板端）和标准卡片（移动端）之间无缝切换。
+*   **无缝暗黑启动页 (Seamless Dark Splash Screen)**: 采用 `flutter_native_splash` 消除白屏闪烁，实现沉浸式加载体验。
+*   **自适应布局 (Adaptive Layouts)**: 在 macOS 桌面端应用和标准移动卡片界面之间实现无缝响应。
 
 ## 🏗 架构与语义分层 (Architecture)
 
@@ -45,12 +47,13 @@
     flutter pub get
     flutter run
     ```
-3.  **API 密钥设置 (极速模式) / API Key Setup (Speed Mode)**:
-    默认情况下，应用使用有限的“模拟数据 (Mock Data)”。要体验真正的 AI 驱动：
+3.  **API 密钥设置 (需要提供真实 AI 驱动) / API Key Setup**:
+    默认情况下，**体验模式 (Experience Mode)** 需要在代码 `llm_service.dart` 中硬编码 API Key（已于开源版脱敏）。
+    或者您可以：
     *   前往 **设置 (Settings)** (首页的齿轮图标)。
     *   切换为 **极速模式 (Speed Mode)**。
-    *   选择您的模型服务商 (DeepSeek, 通义千问 Qwen, MiniMax) 并输入您的 API Key。
-    *   您的 API Key 将通过 `SharedPreferences` 安全地存储在本地。
+    *   选择您的模型服务商 (DeepSeek, 通义千问 Qwen, MiniMax, 或 月之暗面 Kimi) 并输入您的专属 API Key。
+    *   您的 API Key 将通过 `SharedPreferences` 安全地暂存在本地。
 
 ---
 *Created with ❤️ by Antigravity & Sparkle79*

@@ -24,7 +24,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 3, // 升级版本号
+      version: 4, // 升级版本号
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE favorites(
@@ -37,6 +37,7 @@ class DatabaseHelper {
             bio TEXT,
             life_years TEXT,
             theme TEXT,
+            isMock INTEGER,
             timestamp INTEGER
           )
         ''');
@@ -48,6 +49,9 @@ class DatabaseHelper {
         if (oldVersion < 3) {
           await db.execute('ALTER TABLE favorites ADD COLUMN life_years TEXT');
           await db.execute('ALTER TABLE favorites ADD COLUMN theme TEXT');
+        }
+        if (oldVersion < 4) {
+          await db.execute('ALTER TABLE favorites ADD COLUMN isMock INTEGER');
         }
       },
     );

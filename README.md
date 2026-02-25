@@ -1,4 +1,4 @@
-# Philosophy Sayings (全知之海)
+# 沉思室 (Philosophy Sayings)
 
 An immersive, aesthetically pleasing Flutter application that delivers daily philosophical quotes with deep, AI-powered explanations.
 
@@ -9,6 +9,7 @@ An immersive, aesthetically pleasing Flutter application that delivers daily phi
 *   **Deep Explanation (哲言妄解)**: Poetic and insightful breakdowns of the meaning behind each quote.
 *   **Existentialism Bias**: Optimized prompts to explore themes of modern nihilism, focus on existentialists and classical thinkers.
 *   **Dynamic Assets System**: Smart mapping of philosopher names to local asset images with random high-quality variations.
+*   **Multi-Model Support**: Integrated with leading Chinese LLMs including DeepSeek, Qwen (Tongyi Qianwen), MiniMax, and Moonshot (Kimi).
 *   **Offline First / Degradation**: Graceful fallback to rich mock data ("SAMPLE / 示例" indicator) when offline or when API tokens are unavailable.
 
 ### The Philosopher's Chamber (哲学家的密室)
@@ -20,7 +21,8 @@ An immersive, aesthetically pleasing Flutter application that delivers daily phi
 ### Utilities & UX
 *   **Echoes of the Soul (收藏夹)**: A dedicated space to revisit your collected wisdom, featuring a masonry grid layout and SQLite persistence.
 *   **Share as Image**: Convert your current wisdom into a beautiful image card for social sharing (`RepaintBoundary`).
-*   **Adaptive Layouts**: Seamlessly switches between Magazine-style (Desktop/Tablet) and standard cards (Mobile).
+*   **Seamless Dark Splash Screen**: Immersive loading experience without white-flashes, utilizing `flutter_native_splash`.
+*   **Adaptive Layouts**: Seamlessly switches between macOS Desktop App and standard cards (Mobile/iOS/Android).
 
 ## 🏗 Architecture (Semantic Layering)
 
@@ -45,11 +47,12 @@ The codebase is organized following a robust semantic separation of concerns:
     flutter pub get
     flutter run
     ```
-3.  **API Key Setup (Speed Mode)**:
-    By default, the app uses limited "Mock Data". To experience the real AI:
+3.  **API Key Setup (Required for real AI data)**:
+    By default, the Experience Mode requires an API key in `llm_service.dart`. 
+    Alternatively:
     *   Go to **Settings** (Gear Icon on Home Page).
     *   Switch to **Speed Mode**.
-    *   Select your provider (DeepSeek, Qwen, MiniMax) and enter your API Key.
+    *   Select your provider (DeepSeek, Qwen, MiniMax, or Moonshot/Kimi) and enter your personal API Key.
     *   Your API Key is safely stored locally via `SharedPreferences`.
 
 ---
