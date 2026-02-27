@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/preference_service.dart';
 import '../../models/quote.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/llm_service.dart'; // DeepSeek Service
@@ -81,6 +82,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadNewQuote() {
+    if (!PreferenceService().canUseExperienceMode()) return;
+
     setState(() {
       _isLoading = true; // Set loading state
       // 1. 制造“寻觅感” (Artificial Delay)
@@ -107,6 +110,7 @@ class _HomePageState extends State<HomePage> {
 
         _currentQuote = quote; // Update current quote
         _isLoading = false; // Reset loading state
+        await PreferenceService().incrementExperienceUsage();
         return quote;
       });
 
@@ -286,6 +290,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
 
+                if (!PreferenceService().canUseExperienceMode())
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 8,
+                    ),
+                    child: Text(
+                      "今日探索的星火已暂息。若欲长明，\n请前往「设置」配置专属思维信标 (API 密钥)。",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.notoSerifSc(
+                        color: Colors.black54,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+
                 // 2. 底部悬浮胶囊栏 (Floating Capsule Bar)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30, top: 10),
@@ -402,7 +423,12 @@ class _HomePageState extends State<HomePage> {
                             _buildCapsuleAction(
                               icon: Icons.explore_outlined,
                               label: "寻觅",
-                              onTap: _loadNewQuote,
+                              onTap: PreferenceService().canUseExperienceMode()
+                                  ? _loadNewQuote
+                                  : () {},
+                              color: PreferenceService().canUseExperienceMode()
+                                  ? Colors.black87
+                                  : Colors.black26,
                             ),
                           ],
                         );

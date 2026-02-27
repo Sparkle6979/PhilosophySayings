@@ -11,6 +11,7 @@ An immersive, aesthetically pleasing Flutter application that delivers daily phi
 *   **Dynamic Assets System**: Smart mapping of philosopher names to local asset images with random high-quality variations.
 *   **Multi-Model Support**: Integrated with leading Chinese LLMs including DeepSeek, Qwen (Tongyi Qianwen), MiniMax, and Moonshot (Kimi).
 *   **Offline First / Degradation**: Graceful fallback to rich mock data ("SAMPLE / 示例" indicator) when offline or when API tokens are unavailable.
+*   **Experience Mode Rate Limiter**: Elegant, non-intrusive daily quota (max 20/day) for built-in API keys to prevent abuse while maintaining immersion.
 
 ### The Philosopher's Chamber (哲学家的密室)
 *   **Immersive Chat**: Step into a private "chamber" (dark aesthetic UI) to converse directly with the philosopher who authored the quote.

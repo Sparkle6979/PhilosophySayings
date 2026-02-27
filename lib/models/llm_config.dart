@@ -28,7 +28,7 @@ class LLMConfig {
   };
 
   static const Map<LLMProvider, double> _defaultTemperatures = {
-    LLMProvider.deepseek: 1.3,
+    LLMProvider.deepseek: 1.5,
     LLMProvider.qwen: 0.8,
     LLMProvider.minimax: 1.0,
     LLMProvider.moonshot: 0.3, // Kimi prefers lower temperature for strict JSON

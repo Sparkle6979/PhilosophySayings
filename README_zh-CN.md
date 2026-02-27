@@ -11,6 +11,7 @@
 *   **动态资产系统 (Dynamic Assets System)**: 智能地将哲学家名字映射到本地图片资源，并附带随机的高质量变体。
 *   **多模型支持 (Multi-Model Support)**: 集成了国内顶尖大语言模型能力，包含 DeepSeek, 通义千问 (Qwen), MiniMax, 以及 月之暗面 (Moonshot/Kimi)。
 *   **离线优先 / 优雅降级 (Offline First / Degradation)**: 当无网络或 API Token 耗尽时，优雅地降级至丰富的本地模拟数据（带有 "SAMPLE / 示例" 标识）。
+*   **体验模式防滥用机制 (Rate Limiter)**: 设计了极其克制的、无侵入系统弹窗的每日额度限制 (20次/天)，兼顾了新用户的沉浸体验与物理防盗刷。
 
 ### 哲学家的密室 (The Philosopher's Chamber)
 *   **沉浸式对话 (Immersive Chat)**: 步入一个私密的“密室”（深色美学 UI），直接与说出该名言的哲学家进行对话。

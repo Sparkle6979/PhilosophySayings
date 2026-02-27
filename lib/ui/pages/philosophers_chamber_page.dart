@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/preference_service.dart';
 import '../../models/quote.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/llm_service.dart';
@@ -72,11 +73,24 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
     await Future.delayed(const Duration(milliseconds: 2000));
 
     if (!mounted) return;
-    // ... (rest of _simulateOpening is fine, just need to match context)
+
+    // Check if quota is available for "Experience Mode"
+    if (!PreferenceService().canUseExperienceMode()) {
+      setState(() {
+        _messages.add({
+          'role': 'assistant',
+          'content': '（今日的思维信标能量已耗尽。请前往设置启用私人连接，以再次召唤哲学家的回音...）',
+        });
+        _isTyping = false;
+      });
+      return;
+    }
 
     try {
       // Call LLM for dynamic opening based on the quote
       final opening = await _llmService.generateOpeningQuestion(widget.quote);
+      await PreferenceService().incrementExperienceUsage();
+
       if (mounted) {
         setState(() {
           _messages.add({'role': 'assistant', 'content': opening});
@@ -97,6 +111,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
   }
 
   void _sendMessage() async {
+    if (!PreferenceService().canUseExperienceMode()) return;
     if (_textController.text.trim().isEmpty) return;
 
     final text = _textController.text;
@@ -119,6 +134,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
         text,
         _messages, // Pass full history for context
       );
+      await PreferenceService().incrementExperienceUsage();
 
       if (mounted) {
         setState(() {
@@ -326,6 +342,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: TextField(
                           controller: _textController,
+                          enabled: PreferenceService().canUseExperienceMode(),
                           style: const TextStyle(color: Colors.white),
                           cursorColor: Colors.white70,
                           maxLines: 4,
@@ -334,24 +351,36 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
                           textInputAction: TextInputAction
                               .send, // Allow "Enter" to trigger submit
                           decoration: InputDecoration(
-                            hintText: "Type your thought...",
+                            hintText: PreferenceService().canUseExperienceMode()
+                                ? "向 ${widget.quote.author} 发问..."
+                                : "今日额度已达 ${PreferenceService.maxDailyLimit} 次上限。前往设置启用私人连接。",
                             hintStyle: TextStyle(
                               color: Colors.white.withOpacity(0.3),
+                              fontSize:
+                                  PreferenceService().canUseExperienceMode()
+                                  ? null
+                                  : 12,
                             ),
                             border: InputBorder.none,
                           ),
                           onSubmitted: (_) =>
-                              _sendMessage(), // Handle send action
+                              PreferenceService().canUseExperienceMode()
+                              ? _sendMessage()
+                              : null, // Handle send action
                         ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.send_rounded,
-                        color: Colors.white70,
+                        color: PreferenceService().canUseExperienceMode()
+                            ? Colors.white70
+                            : Colors.white24,
                       ),
-                      onPressed: _sendMessage,
+                      onPressed: PreferenceService().canUseExperienceMode()
+                          ? _sendMessage
+                          : null,
                     ),
                   ],
                 ),
