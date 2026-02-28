@@ -1,4 +1,10 @@
-# 沉思室 (Philosophy Sayings)
+<div align="center">
+  <img src="assets/images/philosopher_default.png" width="120" alt="Logo" />
+  <h1>沉思室 (Philosophy Sayings)</h1>
+  <p>
+    <a href="README.md">🇬🇧 English Documentation</a> | 🇨🇳 中文文档
+  </p>
+</div>
 
 一款沉浸式、极具美感的 Flutter 应用程序，为您提供每日哲学名言，并配以由 AI 驱动的深度解读。
 

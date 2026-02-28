@@ -1,4 +1,10 @@
-# 沉思室 (Philosophy Sayings)
+<div align="center">
+  <img src="assets/images/philosopher_default.png" width="120" alt="Logo" />
+  <h1>沉思室 (Philosophy Sayings)</h1>
+  <p>
+    <a href="README_zh-CN.md">🇨🇳 中文文档 (Chinese)</a> | 🇬🇧 English Documentation
+  </p>
+</div>
 
 An immersive, aesthetically pleasing Flutter application that delivers daily philosophical quotes with deep, AI-powered explanations.
 
