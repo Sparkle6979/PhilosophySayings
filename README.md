@@ -62,5 +62,9 @@ The codebase is organized following a robust semantic separation of concerns:
 ### 🎁 Download for Mac
 1. Download **`PhilosophySayings.dmg`** from the [GitHub Releases](https://github.com/Sparkle6979/PhilosophySayings/releases).
 2. Double-click and drag the App to your Applications folder.
+
+### 🎁 Download for Android / Windows
+1. Download **`PhilosophySayings.apk`** (Android) or **`PhilosophySayings-Windows.zip`** (Windows) from the [GitHub Releases](https://github.com/Sparkle6979/PhilosophySayings/releases).
+2. For Windows, extract the `.zip` file and run `philosophy_sayings.exe`.
 3. Enjoy an immersive flow of daily wisdom with built-in experience limits.
 *Created with ❤️ by Antigravity & Sparkle79*

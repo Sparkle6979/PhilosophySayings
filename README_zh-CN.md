@@ -19,6 +19,15 @@
 *   **离线优先 / 优雅降级 (Offline First / Degradation)**: 当无网络或 API Token 耗尽时，优雅地降级至丰富的本地模拟数据（带有 "SAMPLE / 示例" 标识）。
 *   **体验模式防滥用机制 (Rate Limiter)**: 设计了极其克制的、无侵入系统弹窗的每日额度限制 (20次/天)，兼顾了新用户的沉浸体验与物理防盗刷。
 
+### 🎁 跨平台下载体验 (Download)
+
+我们为您准备了开箱即用的体验版（内置开发者赞助的体验额度，每日 20 次防滥用上限，无需配置 API Key 即可立即体验）：
+
+1.  请访问 **[GitHub Releases 页面](https://github.com/Sparkle6979/PhilosophySayings/releases)**。
+2.  **macOS 用户**：下载 `PhilosophySayings.dmg`，双击打开并拖入应用程序文件夹。*(注：如遇安全拦截，请在系统设置 -> 隐私与安全性中点击「仍要打开」)*。
+3.  **Android 用户**：下载 `PhilosophySayings.apk` 直接安装。
+4.  **Windows 用户**：下载 `PhilosophySayings-Windows.zip`，解压后双击运行 `philosophy_sayings.exe`。
+
 ### 哲学家的密室 (The Philosopher's Chamber)
 *   **沉浸式对话 (Immersive Chat)**: 步入一个私密的“密室”（深色美学 UI），直接与说出该名言的哲学家进行对话。
 *   **人格引擎 (Persona Engine)**: 每位哲学家都拥有基于 LangChain.dart 驱动的独特人格（通过 `lib/config/prompts.dart` 设置）。
