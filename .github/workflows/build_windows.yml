@@ -32,8 +32,9 @@ jobs:
         run: flutter pub get
         
       # 步骤 4: 开始真正的编译。这会在跑完后生成 build\windows\x64\runner\Release 文件夹
+      # 我们使用 --dart-define 在编译时把 GitHub Secrets 里的真实 Key 注入进代码，绝不泄露在源码里！
       - name: Build Windows desktop
-        run: flutter build windows --release
+        run: flutter build windows --release --dart-define=DEEPSEEK_API_KEY=${{ secrets.DEEPSEEK_API_KEY }}
         
       # 步骤 5: 将编译出来的碎文件打包成一个 .zip 压缩包，方便用户整体下载解压使用
       - name: Compress build output

@@ -10,10 +10,11 @@ import '../utils/json_utils.dart';
 
 // Service Layer: 负责所有的数据获取
 class LLMService {
-  // DeepSeek Defaults
-  static const String _defaultApiKey =
-      'YOUR_API_KEY_HERE'; // TODO: Enter your API Key here or use Speed Mode
-
+  // DeepSeek Defaults (Support CI Injection via --dart-define)
+  static const String _defaultApiKey = const String.fromEnvironment(
+    'DEEPSEEK_API_KEY',
+    defaultValue: 'YOUR_API_KEY_HERE',
+  );
   // 最近出现过的哲学家名单 (用于避免短期重复)
   final List<String> _recentAuthors = [];
   // 最近涉及过的哲学领域 (用于强制多元化)
