@@ -21,11 +21,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      # 步骤 2: 在这台光秃秃的 Windows 服务器上，装好 Flutter 开发环境 (指定版本 3.19.0，保持稳定)
+      # 步骤 2: 在这台光秃秃的 Windows 服务器上，装好最新的 Flutter 稳定版环境
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
           channel: 'stable'
           
       # 步骤 3: 运行 pub get 下载项目依赖的所有第三方包 (类似 npm install)
@@ -40,7 +39,14 @@ jobs:
       - name: Compress build output
         run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath PhilosophySayings-Windows.zip
         
-      # 步骤 6 (可选但强烈建议): 把打包好的 zip 文件上传到刚才触发这个任务的 Release 页面里！
+      # 步骤 5.5: 提供构建产物下载 (即使不是正式发版，也能在 Actions 页面下载体验)
+      - name: Upload built artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PhilosophySayings-Windows
+          path: PhilosophySayings-Windows.zip
+
+      # 步骤 6 (发版专属): 把打包好的 zip 文件上传到带有 v 标签的 Release 页面里！
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
