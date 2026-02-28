@@ -59,8 +59,8 @@ The codebase is organized following a robust semantic separation of concerns:
     Alternatively:
     *   Go to **Settings** (Gear Icon on Home Page).
     *   Switch to **Speed Mode**.
-    *   Select your provider (DeepSeek, Qwen, MiniMax, or Moonshot/Kimi) and enter your personal API Key.
-    *   Your API Key is safely stored locally via `SharedPreferences`.
-
----
+### 🎁 Download for Mac
+1. Download **`PhilosophySayings.dmg`** from the [GitHub Releases](https://github.com/Sparkle6979/PhilosophySayings/releases).
+2. Double-click and drag the App to your Applications folder.
+3. Enjoy an immersive flow of daily wisdom with built-in experience limits.
 *Created with ❤️ by Antigravity & Sparkle79*
