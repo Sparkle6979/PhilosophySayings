@@ -278,7 +278,9 @@ class _HomePageState extends State<HomePage> {
                 // 1. Quote Card Area (Wrapped for Capture)
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 10.0), // 顶部固定间距
+                    padding: const EdgeInsets.only(
+                      top: 0.0,
+                    ), // Removed top padding
                     child: SingleChildScrollView(
                       child: RepaintBoundary(
                         key: _quoteCardKey,
@@ -307,18 +309,21 @@ class _HomePageState extends State<HomePage> {
 
                 // 2. 底部悬浮胶囊栏 (Floating Capsule Bar)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30, top: 10),
+                  padding: const EdgeInsets.only(
+                    bottom: 16,
+                    top: 0,
+                  ), // Pulled closer to bottom edge
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(
                       24,
                       0,
                       24,
-                      16,
-                    ), // Reduced bottom margin
+                      8,
+                    ), // Further reduced bottom margin
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 8,
-                    ), // Reduced padding
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(
                         0.95,

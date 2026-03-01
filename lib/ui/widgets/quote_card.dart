@@ -412,7 +412,7 @@ class QuoteCard extends StatelessWidget {
                               fontStyle: FontStyle.italic,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 20),
                           Text(
                             quote.author,
                             style: GoogleFonts.notoSerif(
@@ -443,14 +443,14 @@ class QuoteCard extends StatelessWidget {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 20),
                           if (quote.bio != null) ...[
                             Container(
                               width: 40,
                               height: 1,
                               color: Colors.grey[200],
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 14),
                             Text(
                               quote.bio!,
                               textAlign: TextAlign.justify,
@@ -460,7 +460,7 @@ class QuoteCard extends StatelessWidget {
                                 color: Colors.grey[700],
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
                           ],
                           const Divider(),
                           const SizedBox(height: 16),
