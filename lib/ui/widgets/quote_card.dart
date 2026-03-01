@@ -402,16 +402,22 @@ class QuoteCard extends StatelessWidget {
                     Container(
                       decoration: const BoxDecoration(
                         color: Color(
-                          0xFFF9F6F0,
-                        ), // Classic warm paper/parchment tint
+                          0xFFF5F7FA,
+                        ), // Cool, crisp ice-white/pale silver margin
                         borderRadius: BorderRadius.vertical(
                           bottom: Radius.circular(16),
                         ),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: cardWidth * 0.05,
-                          vertical: cardWidth * 0.04,
+                        padding: EdgeInsets.only(
+                          left: cardWidth * 0.05,
+                          right: cardWidth * 0.05,
+                          top:
+                              cardWidth *
+                              0.08, // Increased top spacing significantly
+                          bottom:
+                              cardWidth *
+                              0.06, // Increased bottom spacing slightly
                         ),
                         child: Column(
                           children: [
