@@ -7,17 +7,6 @@ class QuoteCard extends StatelessWidget {
 
   const QuoteCard({Key? key, required this.quote}) : super(key: key);
 
-  // 辅助方法：处理多段落文本的首行缩进
-  String _formatIndentedText(String text) {
-    if (text.isEmpty) return text;
-    // 按换行符分割，去除空行，然后每一段加上全角空格，再拼接回来
-    return text
-        .split('\n')
-        .where((p) => p.trim().isNotEmpty)
-        .map((p) => '\u3000\u3000${p.trim()}')
-        .join('\n\n');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -166,7 +155,7 @@ class QuoteCard extends StatelessWidget {
                           const SizedBox(height: 16),
 
                           Text(
-                            _formatIndentedText(quote.bio!),
+                            quote.bio!,
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.lato(
                               fontSize: metaFontSize * 0.95,
@@ -256,7 +245,7 @@ class QuoteCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6), // Reduced from 8
                       Text(
-                        _formatIndentedText(quote.bio!),
+                        quote.bio!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.grey[700],
@@ -323,7 +312,7 @@ class QuoteCard extends StatelessWidget {
 
                     // Explanation Content
                     Text(
-                      _formatIndentedText(quote.explanation),
+                      quote.explanation,
                       textAlign: TextAlign.justify,
                       style: GoogleFonts.notoSerif(
                         fontSize: explanationFontSize,
@@ -463,7 +452,7 @@ class QuoteCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 14),
                             Text(
-                              _formatIndentedText(quote.bio!),
+                              quote.bio!,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.lato(
                                 fontSize: 12,
@@ -503,7 +492,7 @@ class QuoteCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            _formatIndentedText(quote.explanation),
+                            quote.explanation,
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.notoSerif(
                               fontSize: explanationFontSize,
