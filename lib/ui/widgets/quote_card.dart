@@ -369,7 +369,7 @@ class QuoteCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      height: (cardWidth * 0.75).clamp(200.0, 500.0),
+                      height: (cardWidth * 1.0).clamp(200.0, 600.0), // increased from 0.75 and 500 to make it larger
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: quote.imageUrl != null
@@ -396,13 +396,20 @@ class QuoteCard extends StatelessWidget {
                             )
                           : null,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: cardWidth * 0.05,
-                        vertical: cardWidth * 0.04,
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF9F6F0), // Classic warm paper/parchment tint
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(16),
+                        ),
                       ),
-                      child: Column(
-                        children: [
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: cardWidth * 0.05,
+                          vertical: cardWidth * 0.04,
+                        ),
+                        child: Column(
+                          children: [
                           Text(
                             "“${quote.text}”",
                             textAlign: TextAlign.center,
@@ -502,8 +509,8 @@ class QuoteCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             }
 
