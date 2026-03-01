@@ -13,6 +13,10 @@ on:
 # 2. 任务矩阵 (Jobs)
 jobs:
   build:
+    # 授予动作创建 Release 的最高写权限 (解决 403 报错)
+    permissions:
+      contents: write
+      
     # 这是最核心的一步：告诉 GitHub 租用一台最新版的 Windows 虚拟机来跑我们的代码
     runs-on: windows-latest
     
