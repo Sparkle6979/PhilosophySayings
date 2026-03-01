@@ -8,7 +8,15 @@
 
 An immersive, aesthetically pleasing Flutter application that delivers daily philosophical quotes with deep, AI-powered explanations.
 
-## 🌟 Features
+## � Manifesto
+
+**The Awakening from "Fallenness"**
+In an era where algorithms hijack our attention and systems structurally alienate us, we easily devolve into Heidegger's "das Man" (the They)—copy-pasted social constructs. The inception of *Philosophy Sayings* is not to provide another pretentious tool, but to hammer a breathing hole through the glowing screen. We hope it gently nudges you, amidst the grind of daily life, to occasionally look up at the stars. To take a step back from the social machinery, retain the capacity to question, and reconnect with your "authentic self".
+
+**Beware the Abyss: Anti-Idolatry**
+Simultaneously, this is firmly not a toy for showing off "philosophical jargon." As Nietzsche warned against becoming the abyss we gaze into, we are highly vigilant against the romanticization and idolatry of philosophy. If you use this app merely because citing obscure quotes feels "cool" or fuels a sense of intellectual superiority, it entirely defeats our pure intent of "loving wisdom." True philosophy is an axe for the frozen sea within us, not a silk garment to wear. Stay critical, stay humble, and do not let yourself become an abyss of empty concepts.
+
+## �🌟 Features
 
 ### Core Experience
 *   **Daily Wisdom**: Display curated quotes from great philosophers (e.g., Nietzsche, Camus, Heidegger).
