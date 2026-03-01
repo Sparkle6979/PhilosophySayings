@@ -145,9 +145,21 @@ class JsonUtils {
 
             return _parseJsonContent(singleQuoteFixed);
           } catch (e4) {
-            print('❌ JSON Parse Error (Final): $e4');
-            print('📝 Extracted content was: $content');
-            rethrow;
+            // Strategy E: Handle stray brackets (e.g., LLM hallucinates "] }" at the end)
+            try {
+              print(
+                '⚠️ Strategy D failed ($e4). Trying Strategy E (Remove stray brackets)...',
+              );
+              String strayBracketFixed = content.replaceAll(
+                RegExp(r'\]\s*\}\s*$'),
+                '}',
+              );
+              return _parseJsonContent(strayBracketFixed);
+            } catch (e5) {
+              print('❌ JSON Parse Error (Final): $e5');
+              print('📝 Extracted content was: $content');
+              rethrow;
+            }
           }
         }
       }
