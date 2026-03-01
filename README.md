@@ -69,4 +69,13 @@ The codebase is organized following a robust semantic separation of concerns:
 1. Download **`PhilosophySayings.apk`** (Android) or **`PhilosophySayings-Windows.zip`** (Windows) from the [GitHub Releases](https://github.com/Sparkle6979/PhilosophySayings/releases).
 2. For Windows, extract the `.zip` file and run `philosophy_sayings.exe`.
 3. Enjoy an immersive flow of daily wisdom with built-in experience limits.
+
+## 📄 License & Asset Protection
+
+This project adopts a dual-protection model to balance open-source learning with creator rights:
+
+*   **Source Code**: The application source code is licensed under the [GNU General Public License v3.0 (GPL-3.0)](LICENSE). You are free to study, modify, and distribute the code, provided that your derivative works are also open-sourced under the same GPL-3.0 license.
+*   **Core Assets (All Rights Reserved)**: All AI-generated philosopher portraits (`assets/images/*`) and narrative prompt engineering configurations (`lib/config/prompts.dart`) are the **exclusive property of the original author**. Unauthorized commercial use, re-packaging, or distribution of these specific assets for proprietary applications (e.g., App Store clones) is **strictly prohibited**.
+
+---
 *Created with ❤️ by Antigravity & Sparkle79*

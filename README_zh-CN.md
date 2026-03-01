@@ -73,5 +73,12 @@
     *   选择您的模型服务商 (DeepSeek, 通义千问 Qwen, MiniMax, 或 月之暗面 Kimi) 并输入您的专属 API Key。
     *   您的 API Key 将通过 `SharedPreferences` 安全地暂存在本地。
 
+## 📄 开源协议与资产保护 (License & Protection)
+
+本项目采用“双重保护”策略，以平衡开源分享与创作者权益（特别是防范恶意换皮直接上架应用商店谋利）：
+
+*   **程序源码 (GPL-3.0)**：本仓库的核心代码遵循 [GNU General Public License v3.0 (GPL-3.0)](LICENSE) 协议。您可以自由地学习、修改和分发代码，但这**强制要求**您的衍生作品也必须开源。这剥夺了闭源商业克隆的合法性。
+*   **核心独家资产 (All Rights Reserved)**：本项目内所有精心调配并生成的先锋派哲人画作 (`assets/images/*`) 以及赋予灵魂的提示词工程语料 (`lib/config/prompts.dart`)，**版权完全归原作者所有**。严禁任何未经授权的直接挪用、换皮打包并在任何应用商店进行商业化牟利的行为，违者必究。
+
 ---
 *Created with ❤️ by Antigravity & Sparkle79*
