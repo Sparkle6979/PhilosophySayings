@@ -308,139 +308,149 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                 // 2. 底部悬浮胶囊栏 (Floating Capsule Bar)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 16,
-                    top: 0,
-                  ), // Pulled closer to bottom edge
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(
-                      24,
-                      0,
-                      24,
-                      8,
-                    ), // Further reduced bottom margin
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(
-                        0.95,
-                      ), // High opacity for contrast
-                      borderRadius: BorderRadius.circular(50), // Capsule shape
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: ListenableBuilder(
-                      listenable: FavoritesService(),
-                      builder: (context, _) {
-                        final isFav = FavoritesService().isFavorite(
-                          snapshot.data!,
-                        );
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // Left: Like
-                            _buildCapsuleAction(
-                              icon: isFav
-                                  ? Icons.favorite
-                                  : Icons.favorite_border_rounded,
-                              label: isFav ? "已共鸣" : "共鸣",
-                              color: isFav ? Colors.redAccent : Colors.black87,
-                              onTap: () {
-                                if (isFav) {
-                                  FavoritesService().remove(snapshot.data!);
-                                } else {
-                                  FavoritesService().add(snapshot.data!);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("已收藏到心中的圣殿"),
-                                      duration: Duration(milliseconds: 1500),
-                                      behavior: SnackBarBehavior.floating,
-                                      width: 300,
+                SafeArea(
+                  bottom: true,
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 8,
+                      top: 0,
+                    ), // Minimal padding
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(
+                        24,
+                        0,
+                        24,
+                        0,
+                      ), // Removed bottom margin completely
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(
+                          0.95,
+                        ), // High opacity for contrast
+                        borderRadius: BorderRadius.circular(
+                          50,
+                        ), // Capsule shape
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: ListenableBuilder(
+                        listenable: FavoritesService(),
+                        builder: (context, _) {
+                          final isFav = FavoritesService().isFavorite(
+                            snapshot.data!,
+                          );
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              // Left: Like
+                              _buildCapsuleAction(
+                                icon: isFav
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_rounded,
+                                label: isFav ? "已共鸣" : "共鸣",
+                                color: isFav
+                                    ? Colors.redAccent
+                                    : Colors.black87,
+                                onTap: () {
+                                  if (isFav) {
+                                    FavoritesService().remove(snapshot.data!);
+                                  } else {
+                                    FavoritesService().add(snapshot.data!);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("已收藏到心中的圣殿"),
+                                        duration: Duration(milliseconds: 1500),
+                                        behavior: SnackBarBehavior.floating,
+                                        width: 300,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+
+                              // Center: Anchor (Primary)
+                              Container(
+                                height: 36, // Vertical divider
+                                width: 1,
+                                color: Colors.black12,
+                              ),
+
+                              _buildCapsuleAction(
+                                icon: Icons.vpn_key_rounded,
+                                label: "锚定",
+                                isPrimary: true,
+                                onTap: () {
+                                  if (snapshot.data == null) return;
+                                  final quote = snapshot.data!;
+                                  final history = _chatHistories[quote.text];
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      transitionDuration: const Duration(
+                                        milliseconds: 1000,
+                                      ), // Slower, deeper transition
+                                      pageBuilder:
+                                          (
+                                            context,
+                                            animation,
+                                            secondaryAnimation,
+                                          ) => PhilosophersChamberPage(
+                                            quote: quote,
+                                            initialHistory: history,
+                                            onChatUpdated: (newHistory) {
+                                              _chatHistories[quote.text] =
+                                                  newHistory;
+                                            },
+                                          ),
+                                      transitionsBuilder:
+                                          (
+                                            context,
+                                            animation,
+                                            secondaryAnimation,
+                                            child,
+                                          ) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: child,
+                                            );
+                                          },
                                     ),
                                   );
-                                }
-                              },
-                            ),
+                                },
+                              ),
 
-                            // Center: Anchor (Primary)
-                            Container(
-                              height: 36, // Vertical divider
-                              width: 1,
-                              color: Colors.black12,
-                            ),
+                              Container(
+                                height: 36, // Vertical divider
+                                width: 1,
+                                color: Colors.black12,
+                              ),
 
-                            _buildCapsuleAction(
-                              icon: Icons.vpn_key_rounded,
-                              label: "锚定",
-                              isPrimary: true,
-                              onTap: () {
-                                if (snapshot.data == null) return;
-                                final quote = snapshot.data!;
-                                final history = _chatHistories[quote.text];
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    transitionDuration: const Duration(
-                                      milliseconds: 1000,
-                                    ), // Slower, deeper transition
-                                    pageBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                        ) => PhilosophersChamberPage(
-                                          quote: quote,
-                                          initialHistory: history,
-                                          onChatUpdated: (newHistory) {
-                                            _chatHistories[quote.text] =
-                                                newHistory;
-                                          },
-                                        ),
-                                    transitionsBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                          child,
-                                        ) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: child,
-                                          );
-                                        },
-                                  ),
-                                );
-                              },
-                            ),
-
-                            Container(
-                              height: 36, // Vertical divider
-                              width: 1,
-                              color: Colors.black12,
-                            ),
-
-                            // Right: Explore
-                            _buildCapsuleAction(
-                              icon: Icons.explore_outlined,
-                              label: "寻觅",
-                              onTap: PreferenceService().canUseExperienceMode()
-                                  ? _loadNewQuote
-                                  : () {},
-                              color: PreferenceService().canUseExperienceMode()
-                                  ? Colors.black87
-                                  : Colors.black26,
-                            ),
-                          ],
-                        );
-                      },
+                              // Right: Explore
+                              _buildCapsuleAction(
+                                icon: Icons.explore_outlined,
+                                label: "寻觅",
+                                onTap:
+                                    PreferenceService().canUseExperienceMode()
+                                    ? _loadNewQuote
+                                    : () {},
+                                color:
+                                    PreferenceService().canUseExperienceMode()
+                                    ? Colors.black87
+                                    : Colors.black26,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

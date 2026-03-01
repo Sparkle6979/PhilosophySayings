@@ -155,7 +155,7 @@ class QuoteCard extends StatelessWidget {
                           const SizedBox(height: 16),
 
                           Text(
-                            quote.bio!,
+                            '\u3000\u3000${quote.bio!}',
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.lato(
                               fontSize: metaFontSize * 0.95,
@@ -245,7 +245,7 @@ class QuoteCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6), // Reduced from 8
                       Text(
-                        quote.bio!,
+                        '\u3000\u3000${quote.bio!}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.grey[700],
@@ -312,7 +312,7 @@ class QuoteCard extends StatelessWidget {
 
                     // Explanation Content
                     Text(
-                      quote.explanation,
+                      '\u3000\u3000${quote.explanation}',
                       textAlign: TextAlign.justify,
                       style: GoogleFonts.notoSerif(
                         fontSize: explanationFontSize,
@@ -452,7 +452,7 @@ class QuoteCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 14),
                             Text(
-                              quote.bio!,
+                              '\u3000\u3000${quote.bio!}',
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.lato(
                                 fontSize: 12,
@@ -492,7 +492,7 @@ class QuoteCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            quote.explanation,
+                            '\u3000\u3000${quote.explanation}',
                             textAlign: TextAlign.justify,
                             style: GoogleFonts.notoSerif(
                               fontSize: explanationFontSize,
