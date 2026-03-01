@@ -22,7 +22,7 @@ class LLMConfig {
 
   static const Map<LLMProvider, String> _modelNames = {
     LLMProvider.deepseek: 'deepseek-chat',
-    LLMProvider.qwen: 'qwen-max', // Upgraded to max based on user discussion
+    LLMProvider.qwen: 'qwen-plus', // Upgraded to max based on user discussion
     LLMProvider.minimax: 'M2-her',
     LLMProvider.moonshot: 'moonshot-v1-128k',
   };
