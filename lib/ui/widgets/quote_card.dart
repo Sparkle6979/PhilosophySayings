@@ -397,7 +397,10 @@ class QuoteCard extends StatelessWidget {
                           : null,
                     ),
                     Padding(
-                      padding: EdgeInsets.all(cardWidth * 0.06),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: cardWidth * 0.05,
+                        vertical: cardWidth * 0.04,
+                      ),
                       child: Column(
                         children: [
                           Text(
@@ -409,7 +412,7 @@ class QuoteCard extends StatelessWidget {
                               fontStyle: FontStyle.italic,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 16),
                           Text(
                             quote.author,
                             style: GoogleFonts.notoSerif(
@@ -440,14 +443,14 @@ class QuoteCard extends StatelessWidget {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 16),
                           if (quote.bio != null) ...[
                             Container(
                               width: 40,
                               height: 1,
                               color: Colors.grey[200],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 12),
                             Text(
                               quote.bio!,
                               textAlign: TextAlign.justify,
@@ -457,7 +460,7 @@ class QuoteCard extends StatelessWidget {
                                 color: Colors.grey[700],
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 16),
                           ],
                           const Divider(),
                           const SizedBox(height: 16),

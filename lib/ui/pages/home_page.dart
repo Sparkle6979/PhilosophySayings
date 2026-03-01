@@ -128,24 +128,22 @@ class _HomePageState extends State<HomePage> {
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 装饰性花纹 (Typographic Decoration)
-            const Text(
-              '— ❦ —',
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.black45,
-                fontWeight: FontWeight.w300,
-                letterSpacing: 2.0,
+            const SizedBox(height: 2), // Reduced from 8
+            Text(
+              "Philosophy Sayings",
+              style: GoogleFonts.cinzel(
+                fontSize: 16, // Reduced from 18
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2.5,
               ),
             ),
-            // 主标题
+            const SizedBox(height: 1), // Reduced from 4
             Text(
-              'PHILOSOPHY SAYINGS',
-              style: GoogleFonts.imFellEnglishSc(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-                letterSpacing: 1.5,
+              "—— 沉 思 室 ——",
+              style: GoogleFonts.notoSerif(
+                fontSize: 9, // Reduced from 10
+                letterSpacing: 6.0,
+                color: Colors.black54,
               ),
             ),
           ],
@@ -154,7 +152,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         backgroundColor: Colors.transparent, // 透明 AppBar 现代感更强
         foregroundColor: Colors.black, // 黑色文字
-        toolbarHeight: 50, // 进一步减小高度 (50 -> 40)
+        toolbarHeight: 40, // Reduced from 50
         actions: [
           IconButton(
             icon: const Icon(
@@ -311,11 +309,16 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30, top: 10),
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    margin: const EdgeInsets.fromLTRB(
+                      24,
+                      0,
+                      24,
+                      16,
+                    ), // Reduced bottom margin
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
+                      horizontal: 16,
+                      vertical: 8,
+                    ), // Reduced padding
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(
                         0.95,
