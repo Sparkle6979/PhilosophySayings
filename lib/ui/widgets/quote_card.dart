@@ -369,7 +369,10 @@ class QuoteCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      height: (cardWidth * 1.0).clamp(200.0, 600.0), // increased from 0.75 and 500 to make it larger
+                      height: (cardWidth * 1.0).clamp(
+                        200.0,
+                        600.0,
+                      ), // increased from 0.75 and 500 to make it larger
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: quote.imageUrl != null
@@ -398,7 +401,9 @@ class QuoteCard extends StatelessWidget {
                     ),
                     Container(
                       decoration: const BoxDecoration(
-                        color: Color(0xFFF9F6F0), // Classic warm paper/parchment tint
+                        color: Color(
+                          0xFFF9F6F0,
+                        ), // Classic warm paper/parchment tint
                         borderRadius: BorderRadius.vertical(
                           bottom: Radius.circular(16),
                         ),
@@ -410,107 +415,108 @@ class QuoteCard extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
-                          Text(
-                            "“${quote.text}”",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.notoSerif(
-                              fontSize: quoteFontSize,
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            quote.author,
-                            style: GoogleFonts.notoSerif(
-                              fontSize: authorFontSize,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          if (quote.lifeYears != null) ...[
-                            const SizedBox(height: 4),
                             Text(
-                              quote.lifeYears!,
-                              style: GoogleFonts.lato(
-                                fontSize: 10,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                          if (quote.tagline != null) ...[
-                            const SizedBox(height: 8),
-                            Text(
-                              quote.tagline!,
+                              "“${quote.text}”",
                               textAlign: TextAlign.center,
                               style: GoogleFonts.notoSerif(
-                                fontSize: 11,
+                                fontSize: quoteFontSize,
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.italic,
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                          const SizedBox(height: 20),
-                          if (quote.bio != null) ...[
-                            Container(
-                              width: 40,
-                              height: 1,
-                              color: Colors.grey[200],
-                            ),
-                            const SizedBox(height: 14),
-                            Text(
-                              quote.bio!,
-                              textAlign: TextAlign.justify,
-                              style: GoogleFonts.lato(
-                                fontSize: 12,
-                                height: 1.5,
-                                color: Colors.grey[700],
                               ),
                             ),
                             const SizedBox(height: 20),
-                          ],
-                          const Divider(),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 30,
-                                height: 1,
-                                color: Colors.grey[300],
-                                margin: const EdgeInsets.only(right: 8),
+                            Text(
+                              quote.author,
+                              style: GoogleFonts.notoSerif(
+                                fontSize: authorFontSize,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            if (quote.lifeYears != null) ...[
+                              const SizedBox(height: 4),
                               Text(
-                                "哲言妄解",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[600],
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
+                                quote.lifeYears!,
+                                style: GoogleFonts.lato(
+                                  fontSize: 10,
+                                  color: Colors.grey,
                                 ),
                               ),
-                              Container(
-                                width: 30,
-                                height: 1,
-                                color: Colors.grey[300],
-                                margin: const EdgeInsets.only(left: 8),
+                            ],
+                            if (quote.tagline != null) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                quote.tagline!,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.notoSerif(
+                                  fontSize: 11,
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            quote.explanation,
-                            textAlign: TextAlign.justify,
-                            style: GoogleFonts.notoSerif(
-                              fontSize: explanationFontSize,
-                              height: 1.6,
+                            const SizedBox(height: 20),
+                            if (quote.bio != null) ...[
+                              Container(
+                                width: 40,
+                                height: 1,
+                                color: Colors.grey[200],
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                quote.bio!,
+                                textAlign: TextAlign.justify,
+                                style: GoogleFonts.lato(
+                                  fontSize: 12,
+                                  height: 1.5,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                            const Divider(),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 30,
+                                  height: 1,
+                                  color: Colors.grey[300],
+                                  margin: const EdgeInsets.only(right: 8),
+                                ),
+                                Text(
+                                  "哲言妄解",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 2.0,
+                                  ),
+                                ),
+                                Container(
+                                  width: 30,
+                                  height: 1,
+                                  color: Colors.grey[300],
+                                  margin: const EdgeInsets.only(left: 8),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 16),
+                            Text(
+                              quote.explanation,
+                              textAlign: TextAlign.justify,
+                              style: GoogleFonts.notoSerif(
+                                fontSize: explanationFontSize,
+                                height: 1.6,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             }
 
