@@ -15,6 +15,8 @@ An immersive, aesthetically pleasing Flutter application that delivers daily phi
 *   **Deep Explanation (哲言妄解)**: Poetic and insightful breakdowns of the meaning behind each quote.
 *   **Existentialism Bias**: Optimized prompts to explore themes of modern nihilism, focus on existentialists and classical thinkers.
 *   **Dynamic Assets System**: Smart mapping of philosopher names to local asset images with random high-quality variations.
+*   **Custom Minimalist Art**: Features a gallery of nearly 30 bespoke, continuous-line portraits of world-renowned philosophers (e.g., Foucault, Sartre, Nietzsche, Dostoevsky) specially AI-generated for a clean, non-oppressive aesthetic.
+*   **Modernist Typography & Layout**: Refined UI featuring an icy-white/pale silver palette, a 1:1 crisp portrait layout, and traditional 2-space indented paragraph formatting for a highly polished reading experience.
 *   **Multi-Model Support**: Integrated with leading Chinese LLMs including DeepSeek, Qwen (Tongyi Qianwen), MiniMax, and Moonshot (Kimi).
 *   **Offline First / Degradation**: Graceful fallback to rich mock data ("SAMPLE / 示例" indicator) when offline or when API tokens are unavailable.
 *   **Experience Mode Rate Limiter**: Elegant, non-intrusive daily quota (max 20/day) for built-in API keys to prevent abuse while maintaining immersion.
