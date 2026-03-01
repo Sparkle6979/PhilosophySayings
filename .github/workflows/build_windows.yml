@@ -52,6 +52,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          name: Philosophy Sayings v1.1.0
+          body_path: RELEASE_NOTES.md
           files: PhilosophySayings-Windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
