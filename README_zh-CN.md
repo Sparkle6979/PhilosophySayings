@@ -43,9 +43,16 @@
 
 <div align="center">
   <p><em>“也许只有在脱离了算法的馈赠后，我们才会偶尔想起那些被遗忘的伟大灵魂。”</em></p>
-  <p>如果您愿意支持开发者的服务器与 API 通证开销：<br>
-  <!-- ⚠️ TODO: 在此处替换为您的打赏链接（例如 爱发电、Ko-fi 或隐秘的收款页） -->
-  <a href="#">[ ☕ 请予支持 (Buy me a coffee) ]</a></p>
+  <br>
+  <details>
+    <summary><b>[ ☕ 请予支持 (Buy the developer a coffee) ]</b></summary>
+    <br>
+    <!-- ⚠️ TODO: 将下方的图片地址换成你想展示的打赏二维码 (建议上传到仓库中或使用图床) -->
+    <img src="assets/images/philosopher_default.png" width="200" alt="WeChat Pay" />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="assets/images/philosopher_default.png" width="200" alt="Alipay" />
+    <p><em>感谢您的支持与独立思考</em></p>
+  </details>
 </div>
 
 ## 🚀 快速开始 (Getting Started)

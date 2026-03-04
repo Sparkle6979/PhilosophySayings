@@ -43,9 +43,16 @@ This sanctuary is forged with passion, with the developer independently bearing 
 
 <div align="center">
   <p><em>"Perhaps only when severed from the algorithmic feed do we occasionally remember the forgotten great souls."</em></p>
-  <p>If you'd like to support the developer's server and API token costs:<br>
-  <!-- ⚠️ TODO: Replace the '#' below with your support link (e.g., BuyMeACoffee, Ko-fi, Patreon) -->
-  <a href="#">[ ☕ Buy the developer a coffee ]</a></p>
+  <br>
+  <details>
+    <summary><b>[ ☕ Buy the developer a coffee ]</b></summary>
+    <br>
+    <!-- ⚠️ TODO: Replace the images below with your actual payment QR codes -->
+    <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 1" />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 2" />
+    <p><em>Thank you for your support and your independent thought.</em></p>
+  </details>
 </div>
 
 ## 🚀 Getting Started
