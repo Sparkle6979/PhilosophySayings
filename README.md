@@ -6,7 +6,7 @@
   </p>
 </div>
 
-An immersive, aesthetically pleasing Flutter application that delivers daily philosophical quotes with deep, AI-powered explanations.
+Not just a window into the wisdom of past sages, but a hidden sanctuary for the modern mind. Encased in modernist minimalist aesthetics, this application not only delivers daily forgotten thoughts and poetic deconstructions but also invites you into the "Philosopher's Chamber"—a space to engage in profound, soul-searching dialogues with the silicon ghosts of history's greatest thinkers.
 
 ## 🌌 Manifesto of Man & Machine
 
