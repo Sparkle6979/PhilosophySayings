@@ -42,11 +42,10 @@ We have prepared out-of-the-box pre-built binaries (with a built-in Experience A
 This sanctuary is forged with passion, with the developer independently bearing the initial costs of servers and API tokens. If *Philosophy Sayings* has brought you a moment of tranquility and clarity in this chaotic, alienated world, please consider buying the developer a coffee. Your support is the greatest fuel for us to keep this spiritual territory pure:
 
 <div align="center">
-  <!-- ⚠️ TODO: Replace the images below with your actual payment QR code links (PayPal, BuyMeACoffee, WeChat, Alipay, etc.) -->
-  <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 1" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 2" />
-  <p><em>Thank you for your support and your independent thought. (Please replace images with your actual QR codes)</em></p>
+  <p><em>"Perhaps only when severed from the algorithmic feed do we occasionally remember the forgotten great souls."</em></p>
+  <p>If you'd like to support the developer's server and API token costs:<br>
+  <!-- ⚠️ TODO: Replace the '#' below with your support link (e.g., BuyMeACoffee, Ko-fi, Patreon) -->
+  <a href="#">[ ☕ Buy the developer a coffee ]</a></p>
 </div>
 
 ## 🚀 Getting Started

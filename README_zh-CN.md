@@ -42,11 +42,10 @@
 本应用由开发者用爱发电并承担最初的 API 通证开销。如果您觉得《全知之海》在这喧嚣被异化的世界中为您带来了一丝内心的宁静与清醒，欢迎请开发者喝杯咖啡。您的支持是我们抵抗平庸、维持这片纯粹精神领地的最大动力：
 
 <div align="center">
-  <!-- ⚠️ TODO: 在此处替换为您的微信/支付宝收款码图片路径 -->
-  <img src="assets/images/philosopher_default.png" width="200" alt="WeChat Pay" />
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/images/philosopher_default.png" width="200" alt="Alipay" />
-  <p><em>感谢您的支持与独立思考 (请将上方图片替换为您的真实收款码)</em></p>
+  <p><em>“也许只有在脱离了算法的馈赠后，我们才会偶尔想起那些被遗忘的伟大灵魂。”</em></p>
+  <p>如果您愿意支持开发者的服务器与 API 通证开销：<br>
+  <!-- ⚠️ TODO: 在此处替换为您的打赏链接（例如 爱发电、Ko-fi 或隐秘的收款页） -->
+  <a href="#">[ ☕ 请予支持 (Buy me a coffee) ]</a></p>
 </div>
 
 ## 🚀 快速开始 (Getting Started)
