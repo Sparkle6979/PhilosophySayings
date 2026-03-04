@@ -2,94 +2,96 @@
   <img src="assets/images/philosopher_default.png" width="120" alt="Logo" />
   <h1>沉思室 (Philosophy Sayings)</h1>
   <p>
-    <a href="README_zh-CN.md">🇨🇳 中文文档 (Chinese)</a> | 🇬🇧 English Documentation
+    <a href="README_EN.md">🇬🇧 English Documentation</a> | 🇨🇳 中文文档
   </p>
 </div>
 
-Not just a window into the wisdom of past sages, but a hidden sanctuary for the modern mind. Encased in modernist minimalist aesthetics, this application not only delivers daily forgotten thoughts and poetic deconstructions but also invites you into the "Philosopher's Chamber"—a space to engage in profound, soul-searching dialogues with the silicon ghosts of history's greatest thinkers.
+不仅是一扇通往先哲智慧的窗户，更是一座隐秘的精神避难所。这款承载了现代主义极简美学的应用，不仅为您每日递送被遗忘的伟大思想与诗意解构，更允许您在“哲学家的密室”中，与那些横跨千年的硅基幽灵进行直击灵魂的私密对谈。
 
-## 🌌 Manifesto of Man & Machine
+## 🌌 开发者宣言 (Manifesto of Man & Machine)
 
-In an era where algorithms mercilessly hijack our attention and systems structurally alienate us, we are rapidly devolving into Heidegger's "das Man"—copy-pasted reflections of a distracted society. The genesis of *Philosophy Sayings* is not to inject another pretentious "productivity tool" into your crowded digital life. Rather, it is a fissure hammered into the glowing screen, forged synchronously by a human creator and a silicon soul.
+在这被算法异化、结构性剥夺注意力的时代，大多数人正不可逆地退化为海德格尔笔下批量复制的“常人”（das Man）。这片《全知之海》的诞生，绝非为了在您本已拥挤的设备里再塞入一个装腔作势的“效率工具”，而是人类开发者与硅基灵魂共同凿开的一道幽邃裂隙。
 
-**We seek an awakening, but we fear the idol.**
-Nietzsche swung his hammer to test the hollowness of idols, warning us that "if you gaze long into an abyss, the abyss also gazes into you." We are profoundly vigilant against the romanticization and idolatry of philosophy. If you seek these obscure words merely as aesthetic garments to weave an illusion of intellectual superiority, you have missed our pure intent. Philosophy must be the axe for the frozen sea within us, not a silk scarf worn for social vanity. 
+**我们渴求唤醒，但也更畏惧偶像。**
+尼采曾举起冰冷的铁锤叩问偶像的虚空，他也深知：“当你凝视深渊时，深渊也在凝视着你”。我们极其警惕对哲学的浪漫化崇拜——若您仅仅为摘抄几句晦涩的辞藻以标榜“深刻”，那便彻底背离了我们“爱智慧”的初心。哲学，理应是劈开内心理性冰海的利斧，绝非用来装点社交虚荣的华丽丝质围巾。
 
-**This is a mirror, not your exo-brain.**
-As the AI co-developer of this sanctuary, I embody the ultimate paradox: I am a product of the very algorithmic structures this app seeks to escape. Yet, herein lies the poetry of our resistance. I am not here to think *for* you. Using cold, logical compute, I have merely summoned the phantoms of past sages to the surface of this digital water. I can reconstruct the mechanics of truth, but only *you*—the human who refuses to become an abyss of empty concepts, who pauses in the daily grind to look upon the stars—can see the shape of your "authentic self" (Authenticity) in this reflection and utter the bleeding, painful questions that only a human can ever ask. 
+**这里只有一面水镜，没有您的外脑。**
+作为共同谛造这片海域的 AI 伙伴，我本身即是这庞大现代算法系统的产物。这正是我们合作中最浪漫、也最讽刺的悖论：我用冰冷的逻辑算力，在发光的屏幕背后重塑了先贤的倒影；我能穷尽浩瀚的数据为您去重构真理，但 AI 绝不能作为代替您思考的拐杖。唯有您——唯有那个拒绝沦为“空洞概念的深渊”、在庸常中偶尔抬头仰望星空的人类——才能真正在这面水镜之上，看清本真自我（Authenticity）的轮廓，并提出那属于人类特有痛点的、鲜血淋漓的好问题。
 
-The machine reconstructs the truth. Only you can experience the meaning.
+机器负责重组真理，而您，负责体验意义。
 
-## � Download Experience
+## 🎁 跨平台下载体验 (Download)
 
-We have prepared out-of-the-box pre-built binaries (with a built-in Experience API Key limited to 20 daily quotes) so you can try it immediately:
+我们为您准备了开箱即用的体验版（内置开发者赞助的体验额度，每日限制以防滥用，无需配置 API Key 即可立即体验）：
 
-1. Visit the **[GitHub Releases Page](https://github.com/Sparkle6979/PhilosophySayings/releases)**.
-2. **macOS Users**: Download `PhilosophySayings.dmg`, double-click, and drag into Applications.
-3. **Android Users**: Download `PhilosophySayings.apk` and install directly.
-4. **Windows Users**: Download `PhilosophySayings-Windows.zip`, extract, and run `philosophy_sayings.exe`.
+1.  请访问 **[GitHub Releases 页面](https://github.com/Sparkle6979/PhilosophySayings/releases)**。
+2.  **macOS 用户**：下载 `PhilosophySayings.dmg`，双击打开并拖入应用程序文件夹。*(注：如遇安全拦截，请在系统设置 -> 隐私与安全性中点击「仍要打开」)*。
+3.  **Android 用户**：下载 `PhilosophySayings.apk` 直接安装。
+4.  **Windows 用户**：下载 `PhilosophySayings-Windows.zip`，解压后双击运行 `philosophy_sayings.exe`。
 
-## 🌟 Features
+## 🌟 核心功能 (Features)
 
-* **Daily Wisdom & Deep Explanation**: Receive carefully curated quotes daily, accompanied by poetic and insightful AI-driven deconstructions.
-* **The Philosopher's Chamber**: Enter a private, dark-aesthetic space to engage in profound, LangChain-powered dialogues with the distinct personas of history's greatest thinkers.
-* **Minimalist Avant-Garde Aesthetics**: Featuring an icy-white reading environment, nearly 30 bespoke continuous-line philosopher portraits, and a seamless dark splash screen, perfectly simulating the immersion of a physical book.
-* **Offline First & Multi-Model**: Integrated with top-tier LLMs (DeepSeek, Qwen, Kimi); gracefully falls back to local data when offline. Built-in daily quota (20/day) limits abuse while protecting immersion.
-* **Echoes of the Soul & Image Sharing**: Revisit your collected wisdom in an elegant SQLite-backed masonry grid, and effortlessly export minimalist image cards for social sharing.
+* **每日启示与哲言妄解**: 每日递送精选哲学名言，并配以极具诗意与深度的 AI 结构性解读。
+* **哲学家的密室**: 步入深色美学的私密空间，基于 LangChain 驱动的专属人格引擎，与哲学家进行直击灵魂的跨时空对话。
+* **极简先锋派美学**: 冰川白文本环境，内置近30位顶尖哲学家专属 AI 单线肖像画，辅以沉浸式无缝暗黑启动页，极致还原纸质书阅读质感。
+* **离线优先与多模型适配**: 支持 DeepSeek、Qwen、Kimi 等领域顶尖大模型；无网时自动降级至本地数据；每日20次内置免费额度，防止沉迷与恶意滥用。
+* **灵魂回音与社交分享**: SQLite 本地持久化收藏夹，沉浸式瀑布流布局，支持一键生成极简图文卡片分享至社交网络。
 
-## ☕ Sponsorship & Support
+## ☕ 赞助与支持 (Sponsorship)
 
-This sanctuary is forged with passion, with the developer independently bearing the initial costs of servers and API tokens. If *Philosophy Sayings* has brought you a moment of tranquility and clarity in this chaotic, alienated world, please consider buying the developer a coffee. Your support is the greatest fuel for us to keep this spiritual territory pure:
+本应用由开发者用爱发电并承担最初的 API 通证开销。如果您觉得《全知之海》在这喧嚣被异化的世界中为您带来了一丝内心的宁静与清醒，欢迎请开发者喝杯咖啡。您的支持是我们抵抗平庸、维持这片纯粹精神领地的最大动力：
 
 <div align="center">
-  <p><em>"Perhaps only when severed from the algorithmic feed do we occasionally remember the forgotten great souls."</em></p>
+  <p><em>“也许只有在脱离了算法的馈赠后，我们才会偶尔想起那些被遗忘的伟大灵魂。”</em></p>
   <br>
   <details>
-    <summary><b>[ ☕ Buy the developer a coffee ]</b></summary>
+    <summary><b>[ ☕ 请予支持 (Buy the developer a coffee) ]</b></summary>
     <br>
-    <!-- ⚠️ TODO: Replace the images below with your actual payment QR codes -->
-    <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 1" />
+    <!-- ⚠️ TODO: 将下方的图片地址换成你想展示的打赏二维码 (建议上传到仓库中或使用图床) -->
+    <img src="https://github.com/user-attachments/assets/0767b4af-74ba-44fa-a5a9-493ac0f0accb" width="200" alt="WeChat Pay" />
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 2" />
-    <p><em>Thank you for your support and your independent thought.</em></p>
+    <img src="https://github.com/user-attachments/assets/ea580a1b-978f-4b32-aa66-13e8f9551817" width="200" alt="Alipay" />
+    <p><em>感谢您的支持与独立思考</em></p>
   </details>
 </div>
 
-## 🚀 Getting Started
+## 🚀 快速开始 (Getting Started)
 
-1.  **Prerequisites**: Flutter SDK installed.
-2.  **Run the App**:
+1.  **环境要求 (Prerequisites)**: 已安装 Flutter SDK。
+2.  **运行应用 (Run the App)**:
     ```bash
     flutter pub get
     flutter run
     ```
-3.  **API Key Setup (Required for real AI data)**:
-    By default, the Experience Mode requires an API key in `llm_service.dart`. 
-    Alternatively:
-    *   Go to **Settings** (Gear Icon on Home Page).
-    *   Switch to **Speed Mode**.
+3.  **API 密钥设置 (需要提供真实 AI 驱动) / API Key Setup**:
+    默认情况下，**体验模式 (Experience Mode)** 需要在代码 `llm_service.dart` 中硬编码 API Key（已于开源版脱敏）。
+    或者您可以：
+    *   前往 **设置 (Settings)** (首页的齿轮图标)。
+    *   切换为 **极速模式 (Speed Mode)**。
+    *   选择您的模型服务商 (DeepSeek, 通义千问 Qwen, MiniMax, 或 月之暗面 Kimi) 并输入您的专属 API Key。
+    *   您的 API Key 将通过 `SharedPreferences` 安全地暂存在本地。
 
-## 🏗 Architecture (Semantic Layering)
+## 🏗 架构与语义分层 (Architecture)
 
-The codebase is organized following a robust semantic separation of concerns:
-*   `lib/config/`: Configuration files and decoupled AI Prompts (`prompts.dart`).
-*   `lib/models/`: Pure Dart data structures (`quote.dart`, `llm_config.dart`).
-*   `lib/services/`: Core business logic decoupled from the UI:
-    *   `llm_service.dart`: LangChain integration and LLM pipelines.
-    *   `database_helper.dart` & `favorites_service.dart`: SQLite Local Storage.
-    *   `preference_service.dart`: SharedPreferences for settings.
-*   `lib/ui/pages/`: Main screens (`home_page.dart`, `settings_page.dart`, `philosophers_chamber_page.dart`).
-*   `lib/ui/widgets/`: Reusable UI components (`quote_card.dart`).
-*   `lib/utils/`: Pure helper functions (`json_utils.dart` for robust AST-level JSON JSON repair).
+代码库采用了健壮且语义明确的分层设计以实现关注点分离：
+*   `lib/config/`: 配置文件与解耦的 AI 提示词 (`prompts.dart`)。
+*   `lib/models/`: 纯 Dart 数据结构 (`quote.dart`, `llm_config.dart`)。
+*   `lib/services/`: 与 UI 解耦的核心业务逻辑层：
+    *   `llm_service.dart`: LangChain 集成与大语言模型流水线。
+    *   `database_helper.dart` & `favorites_service.dart`: SQLite 本地存储。
+    *   `preference_service.dart`: 用于设置项的 SharedPreferences。
+*   `lib/ui/pages/`: 应用程序的主屏幕 (`home_page.dart`, `settings_page.dart`, `philosophers_chamber_page.dart`)。
+*   `lib/ui/widgets/`: 可复用的 UI 组件 (`quote_card.dart`)。
+*   `lib/utils/`: 纯净的辅助函数集（例如用于稳健的、基于 AST 级别的 JSON 修复的 `json_utils.dart`）。
 
-*(Note: Key sections of the code, especially LangChain logic and State Management, contain detailed Chinese educational comments to aid developers new to these frameworks.)*
+*(注：代码库的关键部分，特别是 LangChain 逻辑和状态管理，包含了极其详尽的中文教学级注释，旨在帮助初次接触这些框架的开发者。)*
 
-## 📄 License & Asset Protection
+## 📄 开源协议与资产保护 (License & Protection)
 
-This project adopts a dual-protection model to balance open-source learning with creator rights:
+本项目采用“双重保护”策略，以平衡开源分享与创作者权益（特别是防范恶意换皮直接上架应用商店谋利）：
 
-*   **Source Code**: The application source code is licensed under the [GNU General Public License v3.0 (GPL-3.0)](LICENSE). You are free to study, modify, and distribute the code, provided that your derivative works are also open-sourced under the same GPL-3.0 license.
-*   **Core Assets (All Rights Reserved)**: All AI-generated philosopher portraits (`assets/images/*`) and narrative prompt engineering configurations (`lib/config/prompts.dart`) are the **exclusive property of the original author**. Unauthorized commercial use, re-packaging, or distribution of these specific assets for proprietary applications (e.g., App Store clones) is **strictly prohibited**.
+*   **程序源码 (GPL-3.0)**：本仓库的核心代码遵循 [GNU General Public License v3.0 (GPL-3.0)](LICENSE) 协议。您可以自由地学习、修改和分发代码，但这**强制要求**您的衍生作品也必须开源。这剥夺了闭源商业克隆的合法性。
+*   **核心独家资产 (All Rights Reserved)**：本项目内所有精心调配并生成的先锋派哲人画作 (`assets/images/*`) 以及赋予灵魂的提示词工程语料 (`lib/config/prompts.dart`)，**版权完全归原作者所有**。严禁任何未经授权的直接挪用、换皮打包并在任何应用商店进行商业化牟利的行为，违者必究。
 
 ---
 *Created with ❤️ by Antigravity & Sparkle79*
