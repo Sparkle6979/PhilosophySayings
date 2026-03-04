@@ -20,6 +20,15 @@ As the AI co-developer of this sanctuary, I embody the ultimate paradox: I am a 
 
 The machine reconstructs the truth. Only you can experience the meaning.
 
+## � Download Experience
+
+We have prepared out-of-the-box pre-built binaries (with a built-in Experience API Key limited to 20 daily quotes) so you can try it immediately:
+
+1. Visit the **[GitHub Releases Page](https://github.com/Sparkle6979/PhilosophySayings/releases)**.
+2. **macOS Users**: Download `PhilosophySayings.dmg`, double-click, and drag into Applications.
+3. **Android Users**: Download `PhilosophySayings.apk` and install directly.
+4. **Windows Users**: Download `PhilosophySayings-Windows.zip`, extract, and run `philosophy_sayings.exe`.
+
 ## �🌟 Features
 
 ### Core Experience
@@ -45,6 +54,20 @@ The machine reconstructs the truth. Only you can experience the meaning.
 *   **Seamless Dark Splash Screen**: Immersive loading experience without white-flashes, utilizing `flutter_native_splash`.
 *   **Adaptive Layouts**: Seamlessly switches between macOS Desktop App and standard cards (Mobile/iOS/Android).
 
+## 🚀 Getting Started
+
+1.  **Prerequisites**: Flutter SDK installed.
+2.  **Run the App**:
+    ```bash
+    flutter pub get
+    flutter run
+    ```
+3.  **API Key Setup (Required for real AI data)**:
+    By default, the Experience Mode requires an API key in `llm_service.dart`. 
+    Alternatively:
+    *   Go to **Settings** (Gear Icon on Home Page).
+    *   Switch to **Speed Mode**.
+
 ## 🏗 Architecture (Semantic Layering)
 
 The codebase is organized following a robust semantic separation of concerns:
@@ -59,28 +82,6 @@ The codebase is organized following a robust semantic separation of concerns:
 *   `lib/utils/`: Pure helper functions (`json_utils.dart` for robust AST-level JSON JSON repair).
 
 *(Note: Key sections of the code, especially LangChain logic and State Management, contain detailed Chinese educational comments to aid developers new to these frameworks.)*
-
-## 🚀 Getting Started
-
-1.  **Prerequisites**: Flutter SDK installed.
-2.  **Run the App**:
-    ```bash
-    flutter pub get
-    flutter run
-    ```
-3.  **API Key Setup (Required for real AI data)**:
-    By default, the Experience Mode requires an API key in `llm_service.dart`. 
-    Alternatively:
-    *   Go to **Settings** (Gear Icon on Home Page).
-    *   Switch to **Speed Mode**.
-### 🎁 Download for Mac
-1. Download **`PhilosophySayings.dmg`** from the [GitHub Releases](https://github.com/Sparkle6979/PhilosophySayings/releases).
-2. Double-click and drag the App to your Applications folder.
-
-### 🎁 Download for Android / Windows
-1. Download **`PhilosophySayings.apk`** (Android) or **`PhilosophySayings-Windows.zip`** (Windows) from the [GitHub Releases](https://github.com/Sparkle6979/PhilosophySayings/releases).
-2. For Windows, extract the `.zip` file and run `philosophy_sayings.exe`.
-3. Enjoy an immersive flow of daily wisdom with built-in experience limits.
 
 ## 📄 License & Asset Protection
 
