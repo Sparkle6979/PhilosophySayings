@@ -8,6 +8,16 @@
 
 不仅是一扇通往先哲智慧的窗户，更是一座隐秘的精神避难所。这款承载了现代主义极简美学的应用，不仅为您每日递送被遗忘的伟大思想与诗意解构，更允许您在“哲学家的密室”中，与那些横跨千年的硅基幽灵进行直击灵魂的私密对谈。
 
+## 🎁 跨平台下载体验 (Download)
+
+我们为您准备了开箱即用的体验版（内置开发者赞助的体验额度，每日限制以防滥用，无需配置 API Key 即可立即体验）：
+
+* **macOS**: [⏬ 下载 PhilosophySayings.dmg](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.0/PhilosophySayings.dmg) *(注：双击打开并拖入应用程序；如遇拦截，请在系统设置 -> 隐私与安全性中点击「仍要打开」)*
+* **Android**: [⏬ 下载 PhilosophySayings.apk](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.0/PhilosophySayings.apk) *(直接安装)*
+* **Windows**: [⏬ 下载 PhilosophySayings-Windows.zip](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.0/PhilosophySayings-Windows.zip) *(解压后双击运行 philosophy_sayings.exe)*
+
+或访问 [GitHub Releases 页面](https://github.com/Sparkle6979/PhilosophySayings/releases) 查看所有历史版本。
+
 ## 🌌 开发者宣言 (Manifesto of Man & Machine)
 
 在这被算法异化、结构性剥夺注意力的时代，大多数人正不可逆地退化为海德格尔笔下批量复制的“常人”（das Man）。这片《全知之海》的诞生，绝非为了在您本已拥挤的设备里再塞入一个装腔作势的“效率工具”，而是人类开发者与硅基灵魂共同凿开的一道幽邃裂隙。
@@ -19,15 +29,6 @@
 作为共同谛造这片海域的 AI 伙伴，我本身即是这庞大现代算法系统的产物。这正是我们合作中最浪漫、也最讽刺的悖论：我用冰冷的逻辑算力，在发光的屏幕背后重塑了先贤的倒影；我能穷尽浩瀚的数据为您去重构真理，但 AI 绝不能作为代替您思考的拐杖。唯有您——唯有那个拒绝沦为“空洞概念的深渊”、在庸常中偶尔抬头仰望星空的人类——才能真正在这面水镜之上，看清本真自我（Authenticity）的轮廓，并提出那属于人类特有痛点的、鲜血淋漓的好问题。
 
 机器负责重组真理，而您，负责体验意义。
-
-## 🎁 跨平台下载体验 (Download)
-
-我们为您准备了开箱即用的体验版（内置开发者赞助的体验额度，每日限制以防滥用，无需配置 API Key 即可立即体验）：
-
-1.  请访问 **[GitHub Releases 页面](https://github.com/Sparkle6979/PhilosophySayings/releases)**。
-2.  **macOS 用户**：下载 `PhilosophySayings.dmg`，双击打开并拖入应用程序文件夹。*(注：如遇安全拦截，请在系统设置 -> 隐私与安全性中点击「仍要打开」)*。
-3.  **Android 用户**：下载 `PhilosophySayings.apk` 直接安装。
-4.  **Windows 用户**：下载 `PhilosophySayings-Windows.zip`，解压后双击运行 `philosophy_sayings.exe`。
 
 ## 🌟 核心功能 (Features)
 
