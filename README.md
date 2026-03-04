@@ -29,30 +29,25 @@ We have prepared out-of-the-box pre-built binaries (with a built-in Experience A
 3. **Android Users**: Download `PhilosophySayings.apk` and install directly.
 4. **Windows Users**: Download `PhilosophySayings-Windows.zip`, extract, and run `philosophy_sayings.exe`.
 
-## �🌟 Features
+## 🌟 Features
 
-### Core Experience
-*   **Daily Wisdom**: Display curated quotes from great philosophers (e.g., Nietzsche, Camus, Heidegger).
-*   **Deep Explanation (哲言妄解)**: Poetic and insightful breakdowns of the meaning behind each quote.
-*   **Existentialism Bias**: Optimized prompts to explore themes of modern nihilism, focus on existentialists and classical thinkers.
-*   **Dynamic Assets System**: Smart mapping of philosopher names to local asset images with random high-quality variations.
-*   **Custom Minimalist Art**: Features a gallery of nearly 30 bespoke, continuous-line portraits of world-renowned philosophers (e.g., Foucault, Sartre, Nietzsche, Dostoevsky) specially AI-generated for a clean, non-oppressive aesthetic.
-*   **Modernist Typography & Layout**: Refined UI featuring an icy-white/pale silver palette, a 1:1 crisp portrait layout, and traditional 2-space indented paragraph formatting for a highly polished reading experience.
-*   **Multi-Model Support**: Integrated with leading Chinese LLMs including DeepSeek, Qwen (Tongyi Qianwen), MiniMax, and Moonshot (Kimi).
-*   **Offline First / Degradation**: Graceful fallback to rich mock data ("SAMPLE / 示例" indicator) when offline or when API tokens are unavailable.
-*   **Experience Mode Rate Limiter**: Elegant, non-intrusive daily quota (max 20/day) for built-in API keys to prevent abuse while maintaining immersion.
+* **Daily Wisdom & Deep Explanation**: Receive carefully curated quotes daily, accompanied by poetic and insightful AI-driven deconstructions.
+* **The Philosopher's Chamber**: Enter a private, dark-aesthetic space to engage in profound, LangChain-powered dialogues with the distinct personas of history's greatest thinkers.
+* **Minimalist Avant-Garde Aesthetics**: Featuring an icy-white reading environment, nearly 30 bespoke continuous-line philosopher portraits, and a seamless dark splash screen, perfectly simulating the immersion of a physical book.
+* **Offline First & Multi-Model**: Integrated with top-tier LLMs (DeepSeek, Qwen, Kimi); gracefully falls back to local data when offline. Built-in daily quota (20/day) limits abuse while protecting immersion.
+* **Echoes of the Soul & Image Sharing**: Revisit your collected wisdom in an elegant SQLite-backed masonry grid, and effortlessly export minimalist image cards for social sharing.
 
-### The Philosopher's Chamber (哲学家的密室)
-*   **Immersive Chat**: Step into a private "chamber" (dark aesthetic UI) to converse directly with the philosopher who authored the quote.
-*   **Persona Engine**: Each philosopher has a distinct personality driven by LangChain.dart (`lib/config/prompts.dart`).
-*   **Contextual Opening**: The philosopher initiates the conversation based on the specific quote you are viewing.
-*   **Session Persistence**: Chat history is preserved per quote during the app session (State Lifting).
+## ☕ Sponsorship & Support
 
-### Utilities & UX
-*   **Echoes of the Soul (收藏夹)**: A dedicated space to revisit your collected wisdom, featuring a masonry grid layout and SQLite persistence.
-*   **Share as Image**: Convert your current wisdom into a beautiful image card for social sharing (`RepaintBoundary`).
-*   **Seamless Dark Splash Screen**: Immersive loading experience without white-flashes, utilizing `flutter_native_splash`.
-*   **Adaptive Layouts**: Seamlessly switches between macOS Desktop App and standard cards (Mobile/iOS/Android).
+This sanctuary is forged with passion, with the developer independently bearing the initial costs of servers and API tokens. If *Philosophy Sayings* has brought you a moment of tranquility and clarity in this chaotic, alienated world, please consider buying the developer a coffee. Your support is the greatest fuel for us to keep this spiritual territory pure:
+
+<div align="center">
+  <!-- ⚠️ TODO: Replace the images below with your actual payment QR code links (PayPal, BuyMeACoffee, WeChat, Alipay, etc.) -->
+  <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 1" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/images/philosopher_default.png" width="200" alt="Support Method 2" />
+  <p><em>Thank you for your support and your independent thought. (Please replace images with your actual QR codes)</em></p>
+</div>
 
 ## 🚀 Getting Started
 

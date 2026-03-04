@@ -31,28 +31,23 @@
 
 ## 🌟 核心功能 (Features)
 
-### 核心体验 (Core Experience)
-*   **每日启示 (Daily Wisdom)**: 展示由伟大哲学家（如尼采、加缪、海德格尔）精心挑选的名言。
-*   **哲言妄解 (Deep Explanation)**: 对每句名言背后的含义进行富有诗意和深刻的解构。
-*   **存在主义偏好 (Existentialism Bias)**: 优化的提示词，重点探索现代虚无主义主题，聚焦于存在主义者和古典思想家。
-*   **动态资产系统 (Dynamic Assets System)**: 智能地将哲学家名字映射到本地图片资源，并附带随机的高质量变体。
-*   **极简先锋派全套肖像画 (Custom Minimalist Art)**: 内置专门为本应用 AI 生成的近 30 位世界顶级哲学家（如福柯、尼采、陀思妥耶夫斯基等）的纯白底色、极简纯黑线条半身像，辅以莫兰迪点缀色，极具克制的高级感。
-*   **现代主义排版与视觉设计 (Modernist Typography & Layout)**: 采用冰川白的清冷灰度文本底色，配合 1:1 的高清哲人大图比例与优化的排版间距，彻底还原了纸质书与现代电子媒介融合的沉浸美学。
-*   **多模型支持 (Multi-Model Support)**: 集成了国内顶尖大语言模型能力，包含 DeepSeek, 通义千问 (Qwen), MiniMax, 以及 月之暗面 (Moonshot/Kimi)。
-*   **离线优先 / 优雅降级 (Offline First / Degradation)**: 当无网络或 API Token 耗尽时，优雅地降级至丰富的本地模拟数据（带有 "SAMPLE / 示例" 标识）。
-*   **体验模式防滥用机制 (Rate Limiter)**: 设计了极其克制的、无侵入系统弹窗的每日额度限制 (20次/天)，兼顾了新用户的沉浸体验与物理防盗刷。
+* **每日启示与哲言妄解**: 每日递送精选哲学名言，并配以极具诗意与深度的 AI 结构性解读。
+* **哲学家的密室**: 步入深色美学的私密空间，基于 LangChain 驱动的专属人格引擎，与哲学家进行直击灵魂的跨时空对话。
+* **极简先锋派美学**: 冰川白文本环境，内置近30位顶尖哲学家专属 AI 单线肖像画，辅以沉浸式无缝暗黑启动页，极致还原纸质书阅读质感。
+* **离线优先与多模型适配**: 支持 DeepSeek、Qwen、Kimi 等领域顶尖大模型；无网时自动降级至本地数据；每日20次内置免费额度，防止沉迷与恶意滥用。
+* **灵魂回音与社交分享**: SQLite 本地持久化收藏夹，沉浸式瀑布流布局，支持一键生成极简图文卡片分享至社交网络。
 
-### 哲学家的密室 (The Philosopher's Chamber)
-*   **沉浸式对话 (Immersive Chat)**: 步入一个私密的“密室”（深色美学 UI），直接与说出该名言的哲学家进行对话。
-*   **人格引擎 (Persona Engine)**: 每位哲学家都拥有基于 LangChain.dart 驱动的独特人格（通过 `lib/config/prompts.dart` 设置）。
-*   **语境开场白 (Contextual Opening)**: 哲学家会根据您当前正在阅读的具体名言来主动开启对话。
-*   **会话持久化 (Session Persistence)**: 在应用程序的单次运行周期内（状态提升），针对每条名言保存对话历史。
+## ☕ 赞助与支持 (Sponsorship)
 
-### 实用工具与交互体验 (Utilities & UX)
-*   **灵魂回音 (收藏夹 / Echoes of the Soul)**: 一个专门用来重温您收集的智慧的空间，采用瀑布流布局并支持 SQLite 本地持久化。
-*   **分享为图片 (Share as Image)**: 将当前的智慧语录转化为精美的图文卡片，以便在社交媒体分享 (`RepaintBoundary`)。
-*   **无缝暗黑启动页 (Seamless Dark Splash Screen)**: 采用 `flutter_native_splash` 消除白屏闪烁，实现沉浸式加载体验。
-*   **自适应布局 (Adaptive Layouts)**: 在 macOS 桌面端应用和标准移动卡片界面之间实现无缝响应。
+本应用由开发者用爱发电并承担最初的 API 通证开销。如果您觉得《全知之海》在这喧嚣被异化的世界中为您带来了一丝内心的宁静与清醒，欢迎请开发者喝杯咖啡。您的支持是我们抵抗平庸、维持这片纯粹精神领地的最大动力：
+
+<div align="center">
+  <!-- ⚠️ TODO: 在此处替换为您的微信/支付宝收款码图片路径 -->
+  <img src="assets/images/philosopher_default.png" width="200" alt="WeChat Pay" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/images/philosopher_default.png" width="200" alt="Alipay" />
+  <p><em>感谢您的支持与独立思考 (请将上方图片替换为您的真实收款码)</em></p>
+</div>
 
 ## 🚀 快速开始 (Getting Started)
 
