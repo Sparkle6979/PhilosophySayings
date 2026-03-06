@@ -12,9 +12,9 @@ Not just a window into the wisdom of past sages, but a hidden sanctuary for the 
 
 We have prepared out-of-the-box pre-built binaries (with a built-in Experience API Key limited to 20 daily quotes) so you can try it immediately:
 
-* **macOS**: [⏬ Download PhilosophySayings.dmg](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.0/PhilosophySayings.dmg) *(Double-click and drag into Applications)*
-* **Android**: [⏬ Download PhilosophySayings.apk](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.0/PhilosophySayings.apk) *(Install directly)*
-* **Windows**: [⏬ Download PhilosophySayings-Windows.zip](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.0/PhilosophySayings-Windows.zip) *(Extract and run philosophy_sayings.exe)*
+* **macOS**: [⏬ Download PhilosophySayings.dmg](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.1/PhilosophySayings.dmg) *(Double-click and drag into Applications)*
+* **Android**: [⏬ Download PhilosophySayings.apk](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.1/PhilosophySayings.apk) *(Install directly)*
+* **Windows**: [⏬ Download PhilosophySayings-Windows.zip](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.1.1/PhilosophySayings-Windows.zip) *(Extract and run philosophy_sayings.exe)*
 
 Or visit the [GitHub Releases Page](https://github.com/Sparkle6979/PhilosophySayings/releases) for all versions.
 
