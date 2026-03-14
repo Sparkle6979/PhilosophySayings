@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:cross_file/cross_file.dart'; // Explicit import
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart'; // For kIsWeb
 
 class ShareService {
   /// Captures the widget wrapped in the GlobalKey as an image and shares it.
@@ -38,20 +39,30 @@ class ShareService {
 
       final Uint8List pngBytes = byteData.buffer.asUint8List();
 
-      // 3. Save to temporary file (Use Documents to avoid aggressive temp cleanup)
-      final directory = await getApplicationDocumentsDirectory();
-      final imagePath =
-          '${directory.path}/philosophy_quote_${DateTime.now().millisecondsSinceEpoch}.png';
-      final imageFile = File(imagePath);
-      await imageFile.writeAsBytes(pngBytes, flush: true);
+      final filename = 'philosophy_quote_${DateTime.now().millisecondsSinceEpoch}.png';
 
-      if (!await imageFile.exists()) {
-        throw Exception("File not found after writing: $imagePath");
+      if (kIsWeb) {
+        // Web fallback: share directly from memory
+        final xFile = XFile.fromData(
+           pngBytes,
+           mimeType: 'image/png',
+           name: filename,
+        );
+        await Share.shareXFiles([xFile], text: 'Shared from Philosophy Sayings');
+      } else {
+        // Mobile/Desktop: save to file first
+        final directory = await getApplicationDocumentsDirectory();
+        final imagePath = '${directory.path}/$filename';
+        final imageFile = File(imagePath);
+        await imageFile.writeAsBytes(pngBytes, flush: true);
+
+        if (!await imageFile.exists()) {
+          throw Exception("File not found after writing: $imagePath");
+        }
+
+        final xFile = XFile(imagePath);
+        await Share.shareXFiles([xFile], text: 'Shared from Philosophy Sayings');
       }
-
-      // 4. Share the file
-      final xFile = XFile(imagePath);
-      await Share.shareXFiles([xFile], text: 'Shared from Philosophy Sayings');
     } catch (e) {
       print('Error sharing image: $e');
       // Rethrow so UI can show a snackbar if needed, or handle it here

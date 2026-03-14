@@ -108,8 +108,19 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
-        _currentQuote = quote; // Update current quote
-        _isLoading = false; // Reset loading state
+        // 预加载下即将展示的哲学家图片
+        if (mounted && quote.imageUrl != null) {
+          try {
+            await precacheImage(AssetImage(quote.imageUrl!), context);
+          } catch (e) {
+            print("❌ Failed to precache image: $e");
+          }
+        }
+
+        if (mounted) {
+          _currentQuote = quote; // Update current quote
+          _isLoading = false; // Reset loading state
+        }
         await PreferenceService().incrementExperienceUsage();
         return quote;
       });
@@ -121,140 +132,102 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), // 浅灰背景，更有质感
-      appBar: AppBar(
-        // title: const Text('Philosophy Sayings'),
-        title: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 2), // Reduced from 8
-            Text(
-              "Philosophy Sayings",
-              style: GoogleFonts.cinzel(
-                fontSize: 16, // Reduced from 18
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2.5,
-              ),
-            ),
-            const SizedBox(height: 1), // Reduced from 4
-            Text(
-              "—— 沉 思 室 ——",
-              style: GoogleFonts.notoSerif(
-                fontSize: 9, // Reduced from 10
-                letterSpacing: 6.0,
-                color: Colors.black54,
-              ),
-            ),
-          ],
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent, // 透明 AppBar 现代感更强
-        foregroundColor: Colors.black, // 黑色文字
-        toolbarHeight: 40, // Reduced from 50
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.share_outlined,
-              size: 20,
-              color: Colors.black54,
-            ),
-            tooltip: "分享哲思",
-            onPressed: _shareQuote,
-          ),
-          const SizedBox(width: 8), // Spacing
-          IconButton(
-            icon: const Icon(
-              Icons.bookmarks_rounded,
-              color: Colors.black54,
-              size: 20,
-            ), // 稍微减小图标并变淡
-            tooltip: "哲思收藏",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const FavoritesPage()),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-          IconButton(
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: Colors.black54,
-              size: 20,
-            ),
-            tooltip: "设置",
-            onPressed: () async {
-              // Navigate to Settings Page
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsPage()),
-              );
-              // Upon return, reload LLM Config
-              if (mounted) {
-                setState(() {
-                  _llmService.reloadConfig();
-                  // Optionally reload quote if needed, but not strictly necessary
-                  // _loadNewQuote();
-                });
-              }
-            },
-          ),
-          const SizedBox(width: 8), // 右侧边距微调
-        ],
-      ),
-      body: FutureBuilder<Quote>(
-        future: _quoteFuture,
-        builder: (context, snapshot) {
-          // 1. 加载中 (Thematic Loading)
-          if (snapshot.connectionState == ConnectionState.waiting ||
-              _isLoading) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Minimalist Pulse Animation
-                  TweenAnimationBuilder<double>(
-                    tween: Tween<double>(begin: 0.3, end: 1.0),
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.easeInOut,
-                    builder: (context, value, child) {
-                      return Opacity(opacity: value, child: child);
-                    },
-                    onEnd:
-                        () {}, // Loop handled by widget state if needed, but simple fade is enough for short waits
-                    child: const Icon(
-                      Icons.auto_awesome, // Sparkle/Star icon
-                      size: 32,
-                      color: Colors.black26,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "Visiting the Omniscient Sea...", // More poetic
-                    style: GoogleFonts.imFellEnglishSc(
-                      color: Colors.black45,
-                      fontSize: 16,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "正在造访全知之海...",
-                    style: TextStyle(
-                      color: Colors.black38,
-                      fontSize: 12,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
+    return FutureBuilder<Quote>(
+      future: _quoteFuture,
+      builder: (context, snapshot) {
+        final isLoading = snapshot.connectionState == ConnectionState.waiting || _isLoading;
 
-          // 2. 错误处理
+        return Scaffold(
+          backgroundColor: const Color(0xFFF5F5F5), // 浅灰背景，更有质感
+          appBar: AppBar(
+            // title: const Text('Philosophy Sayings'),
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 2), // Reduced from 8
+                Text(
+                  "Philosophy Sayings",
+                  style: GoogleFonts.cinzel(
+                    fontSize: 16, // Reduced from 18
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 2.5,
+                  ),
+                ),
+                const SizedBox(height: 1), // Reduced from 4
+                Text(
+                  "—— 沉 思 室 ——",
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 9, // Reduced from 10
+                    letterSpacing: 6.0,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: Colors.transparent, // 透明 AppBar 现代感更强
+            foregroundColor: Colors.black, // 黑色文字
+            toolbarHeight: 40, // Reduced from 50
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.share_outlined,
+                  size: 20,
+                  color: Colors.black54,
+                ),
+                tooltip: "分享哲思",
+                onPressed: _shareQuote,
+              ),
+              const SizedBox(width: 8), 
+              IconButton(
+                icon: const Icon(
+                  Icons.bookmarks_rounded,
+                  color: Colors.black54,
+                  size: 20,
+                ), // 稍微减小图标并变淡
+                tooltip: "哲思收藏",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const FavoritesPage()),
+                  );
+                },
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(
+                  Icons.settings_outlined,
+                  color: Colors.black54,
+                  size: 20,
+                ),
+                tooltip: "设置",
+                onPressed: () async {
+                  // Navigate to Settings Page
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SettingsPage()),
+                  );
+                  // Upon return, reload LLM Config
+                  if (mounted) {
+                    setState(() {
+                      _llmService.reloadConfig();
+                      // Optionally reload quote if needed, but not strictly necessary
+                      // _loadNewQuote();
+                    });
+                  }
+                },
+              ),
+              const SizedBox(width: 8), // 右侧边距微调
+            ],
+          ),
+          body: () {
+            // 1. 加载中 (Thematic Loading)
+            if (isLoading) {
+              return const _MinimalLoadingView();
+            }
+
+            // 2. 错误处理
           if (snapshot.hasError) {
             _showError("发生了时空扰动: ${snapshot.error}");
             return Center(
@@ -443,9 +416,9 @@ class _HomePageState extends State<HomePage> {
           }
 
           return const SizedBox();
-        },
-      ),
-    );
+        }(), // Invoke the closure
+      );
+    });
   }
 
   Widget _buildCapsuleAction({
@@ -480,4 +453,126 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+class _MinimalLoadingView extends StatefulWidget {
+  const _MinimalLoadingView({Key? key}) : super(key: key);
+  @override
+  State<_MinimalLoadingView> createState() => _MinimalLoadingViewState();
+}
+
+class _MinimalLoadingViewState extends State<_MinimalLoadingView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 3000))
+      ..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                final breathValue = (0.5 - (_controller.value - 0.5).abs()) * 2;
+                final scale = 0.8 + (breathValue * 0.35);
+                return Transform.scale(
+                  scale: scale,
+                  child: Opacity(
+                    opacity: 0.3 + (breathValue * 0.7),
+                    child: Center(
+                      child: CustomPaint(
+                        size: const Size(28, 28),
+                        painter: _StarPainter(),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 36),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              final breathValue = (0.5 - (_controller.value - 0.5).abs()) * 2;
+              return Opacity(
+                opacity: 0.6 + (breathValue * 0.4),
+                child: Text(
+                  "WAKING UP THE PHILOSOPHERS",
+                  style: GoogleFonts.imFellEnglishSc(
+                    color: Colors.black87,
+                    fontSize: 12,
+                    letterSpacing: 3.5,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+               final breathValue = (0.5 - (_controller.value - 0.5).abs()) * 2;
+              return Opacity(
+                opacity: 0.4 + (breathValue * 0.4),
+                child: const Text(
+                  "正在造访全知之海...",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 11,
+                    letterSpacing: 6.0,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StarPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black87
+      ..style = PaintingStyle.fill;
+    final w = size.width;
+    final h = size.height;
+    final cx = w / 2;
+    final cy = h / 2;
+    final path = Path();
+    path.moveTo(cx, 0);
+    path.quadraticBezierTo(cx, cy, w, cy);
+    path.quadraticBezierTo(cx, cy, cx, h);
+    path.quadraticBezierTo(cx, cy, 0, cy);
+    path.quadraticBezierTo(cx, cy, cx, 0);
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

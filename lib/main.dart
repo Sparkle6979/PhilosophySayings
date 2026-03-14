@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'ui/pages/home_page.dart';
 import 'ui/pages/onboarding_page.dart';
 import 'services/preference_service.dart';
+import 'services/ambient_service.dart';
 
 void main() async {
   // 1. Flutter 引擎绑定：在执行任何需要与原生平台层 (如 iOS/Android) 交互的代码前，必须调用。
@@ -16,6 +17,7 @@ void main() async {
   // 初始化过程是异步的 (从本地磁盘读取设置)，所以加上 await。
   final prefs = PreferenceService();
   await prefs.init();
+  await AmbientService.instance.init();
 
   // 3. 启动应用 (包入 DevicePreview 神器)
   // 当开启 kReleaseMode (打发布包) 时，DevicePreview 会自动隐身，绝不影响真实用户。

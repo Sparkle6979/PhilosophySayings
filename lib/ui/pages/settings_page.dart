@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/llm_config.dart';
 import '../../services/preference_service.dart';
+import '../../services/ambient_service.dart';
 import 'onboarding_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -89,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   const SizedBox(height: 8),
                   Text(
                     _config.mode == AppMode.experience
-                        ? "您正使用公共通道与先贤微弱共鸣。每日都在消耗着缘分。"
+                        ? "您正通过公共思维信标与先贤微弱共鸣。即刻开启寻觅。"
                         : "您已建立私有的灵魂链路。在此，思想的流动不再受限。",
                     style: TextStyle(color: Colors.grey[600], height: 1.4),
                   ),
@@ -113,7 +115,12 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
 
-          // 2. Configuration Area (Only for Speed Mode)
+          // 2. Ambient Music Control Card
+          // Extracted to a separate method for cleaner UI structure.
+          const SizedBox(height: 20),
+          _buildAmbientMusicCard(),
+
+          // 3. Configuration Area (Only for Speed Mode)
           if (_config.mode == AppMode.speed) ...[
             const SizedBox(height: 20),
             const Padding(
@@ -285,6 +292,73 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 20),
         ],
+      ),
+    );
+  }
+
+  /// Builds the Ambient Music Control Card.
+  /// Uses a ListenableBuilder to reactively update the UI when the AmbientService state changes,
+  /// ensuring smooth slider and toggle interactions.
+  Widget _buildAmbientMusicCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: ListenableBuilder(
+          listenable: AmbientService.instance,
+          builder: (context, _) {
+            final ambient = AmbientService.instance;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Row(
+                    children: const [
+                      Icon(Icons.music_note_rounded, size: 18, color: Colors.black54),
+                      SizedBox(width: 8),
+                      Text("环境音乐 / Ambient Music", style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  subtitle: const Text("平静的声学纹理 (Calm acoustic textures)", style: TextStyle(fontSize: 12)),
+                  value: ambient.isEnabled,
+                  activeColor: Colors.black87,
+                  onChanged: (value) {
+                    HapticFeedback.lightImpact();
+                    ambient.setEnabled(value);
+                  },
+                ),
+                if (ambient.isEnabled) ...[
+                  const Divider(height: 1),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 4),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.volume_down_rounded, size: 16, color: Colors.black38),
+                        Expanded(
+                          child: Slider(
+                            value: ambient.volume,
+                            min: 0.0,
+                            max: 1.0,
+                            divisions: 10,
+                            activeColor: Colors.black87,
+                            inactiveColor: Colors.black12,
+                            // Immediate update without async/await to prevent UI freezing, especially on Web
+                            onChanged: (value) => ambient.setVolume(value),
+                          ),
+                        ),
+                        const Icon(Icons.volume_up_rounded, size: 16, color: Colors.black38),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            );
+          },
+        ),
       ),
     );
   }

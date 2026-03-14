@@ -1,10 +1,14 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:flutter/foundation.dart'; // For kIsWeb
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import '../models/quote.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
+  static const String _webPrefsKey = 'web_favorites';
 
   factory DatabaseHelper() => _instance;
 
@@ -12,6 +16,9 @@ class DatabaseHelper {
 
   /// 获取数据库实例，如果不存在则初始化
   Future<Database> get database async {
+    if (kIsWeb) {
+      throw UnsupportedError('SQLite is not supported on Web, using SharedPreferences instead.');
+    }
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
@@ -61,14 +68,22 @@ class DatabaseHelper {
 
   /// 插入金句
   Future<int> insertQuote(Quote quote) async {
-    final db = await database;
-    // 使用 uuid 或 text 的哈希作为 ID
     final id = quote.text.hashCode.toString();
     final data = quote.toJson();
     data['id'] = id;
     data['timestamp'] = DateTime.now().millisecondsSinceEpoch;
 
-    // ConflictAlgorithm.replace: 如果 ID 重复则覆盖
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      final str = prefs.getString(_webPrefsKey) ?? '[]';
+      final List<dynamic> list = jsonDecode(str);
+      list.removeWhere((item) => item['id'] == id);
+      list.add(data);
+      await prefs.setString(_webPrefsKey, jsonEncode(list));
+      return 1;
+    }
+
+    final db = await database;
     return await db.insert(
       'favorites',
       data,
@@ -78,13 +93,31 @@ class DatabaseHelper {
 
   /// 删除金句
   Future<int> deleteQuote(String text) async {
-    final db = await database;
     final id = text.hashCode.toString();
+
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      final str = prefs.getString(_webPrefsKey) ?? '[]';
+      final List<dynamic> list = jsonDecode(str);
+      list.removeWhere((item) => item['id'] == id);
+      await prefs.setString(_webPrefsKey, jsonEncode(list));
+      return 1;
+    }
+
+    final db = await database;
     return await db.delete('favorites', where: 'id = ?', whereArgs: [id]);
   }
 
   /// 获取所有收藏
   Future<List<Quote>> getFavorites() async {
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      final str = prefs.getString(_webPrefsKey) ?? '[]';
+      final List<dynamic> list = jsonDecode(str);
+      list.sort((a, b) => (b['timestamp'] as int? ?? 0).compareTo((a['timestamp'] as int? ?? 0)));
+      return list.map((e) => Quote.fromJson(e as Map<String, dynamic>)).toList();
+    }
+
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'favorites',

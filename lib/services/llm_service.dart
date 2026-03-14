@@ -222,7 +222,7 @@ class LLMService {
         "bio": "弗里德里希·尼采（1844-1900），德国哲学家，主要探讨权力意志、超人学说。",
         "explanation":
             "这句话常常用来比喻那些因为缺乏理解（听不见音乐）而对他人行为（跳舞）产生误解和偏见的人。在尼采看来，只有通过深刻的生命体验，才能理解“酒神精神”般的狂醉与释放。",
-        "imageUrl": "assets/images/nietzsche_0.png",
+        "imageUrl": "assets/images/nietzsche_0.webp",
       },
       {
         "text": "知之为知之，不知为不知，是知也。",
@@ -233,7 +233,7 @@ class LLMService {
         "bio": "孔子（公元前551年―公元前479年），中国古代思想家、教育家，儒家学派创始人。",
         "explanation":
             "这是关于认知的诚实。它不仅仅是承认无知，而是将“承认无知”本身视为一种智慧。在信息爆炸的今天，保持这种智识上的谦逊尤为重要。",
-        "imageUrl": "assets/images/confucius_0.png",
+        "imageUrl": "assets/images/confucius_0.webp",
       },
       {
         "text": "语言是存在的家。",
@@ -244,7 +244,7 @@ class LLMService {
         "bio": "马丁·海德格尔（1889-1976），德国哲学家，20世纪存在主义哲学的代表人物。",
         "explanation":
             "这句话揭示了语言与存在之间深刻的本体论关系。人以语言为家，在语言中栖居；通过语言，人得以触碰和理解存在的真理。语言不仅仅是工具，更是我们构建和理解世界的根基。",
-        "imageUrl": "assets/images/heidegger_0.png",
+        "imageUrl": "assets/images/heidegger_0.webp",
       },
     ];
 
@@ -335,6 +335,15 @@ class LLMService {
       '鲁迅': 'luxun',
       'dostoevsky': 'dostoevsky',
       '陀思妥耶夫斯基': 'dostoevsky',
+      'tolstoy': 'tolstoy',
+      '托尔斯泰': 'tolstoy',
+      '列夫·托尔斯泰': 'tolstoy',
+      'beauvoir': 'de_beauvoir',
+      '波伏娃': 'de_beauvoir',
+      '西蒙娜·德·波伏娃': 'de_beauvoir',
+      'freud': 'freud',
+      '弗洛伊德': 'freud',
+      '西格蒙德·弗洛伊德': 'freud',
     };
 
     String? prefix;
@@ -347,25 +356,25 @@ class LLMService {
 
     if (prefix == null) {
       // 默认回退：使用剪影通用图
-      return 'assets/images/philosopher_default.png';
+      return 'assets/images/philosopher_default.webp';
     }
 
     try {
       // 2. 利用 AssetManifest 动态获取匹配的所有图片
-      // 这里的 assets/Images/$prefix 可以匹配尼采的多张：nietzsche_0.png, nietzsche_1.png...
+      // 这里的 assets/Images/$prefix 可以匹配尼采的多张：nietzsche_0.webp, nietzsche_1.webp...
       final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
       final assets = manifest
           .listAssets()
           .where(
             (path) =>
                 path.startsWith('assets/images/$prefix') &&
-                path.endsWith('.png'),
+                path.endsWith('.webp'),
           )
           .toList();
 
       if (assets.isEmpty) {
         // 默认回退：使用剪影通用图
-        return 'assets/images/philosopher_default.png';
+        return 'assets/images/philosopher_default.webp';
       }
 
       // 3. 随机返回一张图片
@@ -373,7 +382,7 @@ class LLMService {
     } catch (e) {
       print('Warning: Asset mapping failed: $e');
       // 默认回退：使用剪影通用图
-      return 'assets/images/philosopher_default.png';
+      return 'assets/images/philosopher_default.webp';
     }
   }
 

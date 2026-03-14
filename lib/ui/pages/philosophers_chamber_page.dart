@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../services/preference_service.dart';
 import '../../models/quote.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/llm_service.dart';
+import '../../utils/theme_color_handler.dart';
 
 class PhilosophersChamberPage extends StatefulWidget {
   final Quote quote;
@@ -27,6 +29,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
   // ScrollController 用于在收到新消息时，自动将聊天列表滚动到底部。
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
   final LLMService _llmService = LLMService();
 
   // 聊天记录存储。格式与 LangChain 期望的结构相似：[{'role': 'user', 'content': '...'}, ...]
@@ -39,6 +42,14 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
   @override
   void initState() {
     super.initState();
+    ThemeColorHandler.updateThemeColor('#000000'); // set PWA meta color to black
+    
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        Future.delayed(const Duration(milliseconds: 300), () => _scrollToBottom());
+      }
+    });
+
     // Start entrance animation sequence
     _playEntranceAnimation();
 
@@ -56,6 +67,15 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
       // [逻辑说明]: 首次进入，模拟哲学家“主动”开口。
       _simulateOpening();
     }
+  }
+
+  @override
+  void dispose() {
+    ThemeColorHandler.updateThemeColor('#F5F5F5'); // Restore PWA meta color
+    _focusNode.dispose();
+    _scrollController.dispose();
+    _textController.dispose();
+    super.dispose();
   }
 
   void _playEntranceAnimation() async {
@@ -183,7 +203,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
               opacity: 0.08, // Very subtle "soul" presence
               child: Image.asset(
                 widget.quote.imageUrl ??
-                    'assets/images/philosopher_default.png',
+                    'assets/images/philosopher_default.webp',
                 fit: BoxFit.cover, // Cover the entire screen
                 alignment: Alignment.center,
               ),
@@ -195,6 +215,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
             children: [
               // Custom AppBar
               AppBar(
+                systemOverlayStyle: SystemUiOverlayStyle.light,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 leading: IconButton(
@@ -341,6 +362,7 @@ class _PhilosophersChamberPageState extends State<PhilosophersChamberPage> {
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: TextField(
+                          focusNode: _focusNode,
                           controller: _textController,
                           enabled: PreferenceService().canUseExperienceMode(),
                           style: const TextStyle(color: Colors.white),

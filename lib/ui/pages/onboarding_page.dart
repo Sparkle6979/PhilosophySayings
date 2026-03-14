@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/preference_service.dart';
+import '../../services/ambient_service.dart';
 import '../../models/llm_config.dart';
 import 'home_page.dart';
 import 'settings_page.dart';
@@ -68,7 +70,7 @@ class OnboardingPage extends StatelessWidget {
                       child: Opacity(
                         opacity: 0.8,
                         child: Image.asset(
-                          'assets/images/philosopher_default.png',
+                          'assets/images/philosopher_default.webp',
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -151,7 +153,7 @@ class OnboardingPage extends StatelessWidget {
                       ),
                       SizedBox(height: 6),
                       Text(
-                        "以访客身份，在此短暂驻足。\n每日虽有界限，亦能窥见星光。",
+                        "以游者身份，在此短暂驻足。\n每日虽有界限，亦能窥见星光。",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 12,
@@ -202,9 +204,38 @@ class OnboardingPage extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              _buildMusicToggle(),
+              const SizedBox(height: 10),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Builds the ambient music toggle icon.
+  /// Placed on the initial screen to allow immediate user interaction,
+  /// satisfying Web Audio API restrictions which require a user gesture.
+  Widget _buildMusicToggle() {
+    return Align(
+      alignment: Alignment.center,
+      child: ListenableBuilder(
+        listenable: AmbientService.instance,
+        builder: (context, _) {
+          final isEnabled = AmbientService.instance.isEnabled;
+          return IconButton(
+            icon: Icon(
+              isEnabled ? Icons.music_note_rounded : Icons.music_off_rounded,
+              color: isEnabled ? Colors.black87 : Colors.black26,
+              size: 24,
+            ),
+            tooltip: isEnabled ? "关闭环境音 / Disable Ambient Music" : "开启环境音 / Enable Ambient Music",
+            onPressed: () async {
+              HapticFeedback.lightImpact();
+              await AmbientService.instance.toggle();
+            },
+          );
+        },
       ),
     );
   }
