@@ -331,30 +331,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ambient.setEnabled(value);
                   },
                 ),
-                if (ambient.isEnabled) ...[
-                  const Divider(height: 1),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 4),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.volume_down_rounded, size: 16, color: Colors.black38),
-                        Expanded(
-                          child: Slider(
-                            value: ambient.volume,
-                            min: 0.0,
-                            max: 1.0,
-                            divisions: 10,
-                            activeColor: Colors.black87,
-                            inactiveColor: Colors.black12,
-                            // Immediate update without async/await to prevent UI freezing, especially on Web
-                            onChanged: (value) => ambient.setVolume(value),
-                          ),
-                        ),
-                        const Icon(Icons.volume_up_rounded, size: 16, color: Colors.black38),
-                      ],
-                    ),
-                  ),
-                ],
               ],
             );
           },

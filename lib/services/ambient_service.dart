@@ -10,16 +10,13 @@ class AmbientService extends ChangeNotifier {
 
   static const String _audioAsset = 'audio/background.mp3';
   static const String _prefEnabled = 'ambient_enabled';
-  static const String _prefVolume = 'ambient_volume';
   static const double _defaultVolume = 0.3;
 
   final AudioPlayer _player = AudioPlayer();
   bool _isEnabled = false;
-  double _volume = _defaultVolume;
   bool _initialized = false;
 
   bool get isEnabled => _isEnabled;
-  double get volume => _volume;
 
   /// 初始化：从持久化配置中读取状态。应在 main() 中调用一次。
   Future<void> init() async {
@@ -28,9 +25,8 @@ class AmbientService extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       _isEnabled = prefs.getBool(_prefEnabled) ?? false;
-      _volume = prefs.getDouble(_prefVolume) ?? _defaultVolume;
       
-      await _player.setVolume(_volume);
+      await _player.setVolume(_defaultVolume);
       await _player.setReleaseMode(ReleaseMode.loop);
       
       if (_isEnabled && !kIsWeb) {
@@ -72,25 +68,8 @@ class AmbientService extends ChangeNotifier {
     }
   }
 
-  /// 设置音量（0.0 ~ 1.0）。
-  Future<void> setVolume(double volume) async {
-    final oldVolume = _volume;
-    _volume = volume.clamp(0.0, 1.0);
-    if (oldVolume == _volume) return;
-    
-    notifyListeners(); // 立即通知 UI 移动滑块
-    
-    try {
-      await _player.setVolume(_volume);
-      await _persist();
-    } catch (e) {
-      debugPrint("AmbientService setVolume error: $e");
-    }
-  }
-
   Future<void> _persist() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_prefEnabled, _isEnabled);
-    await prefs.setDouble(_prefVolume, _volume);
   }
 }
