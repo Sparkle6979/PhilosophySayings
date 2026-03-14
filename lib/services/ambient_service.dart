@@ -35,7 +35,7 @@ class AmbientService extends ChangeNotifier {
       
       if (_isEnabled && !kIsWeb) {
         // 非 Web 端可以尝试直接播放，Web 端需等待用户交互
-        await _player.play(AssetSource(_audioAsset));
+        await _player.play(kIsWeb ? UrlSource('assets/assets/audio/background.mp3') : AssetSource(_audioAsset));
       }
     } catch (e) {
       debugPrint("AmbientService init error: $e");
@@ -57,7 +57,7 @@ class AmbientService extends ChangeNotifier {
     // 如果先 await _persist()，异步等待会丢失用户操作上下文，导致浏览器拦截。
     try {
       if (_isEnabled) {
-        _player.play(AssetSource(_audioAsset)); // Fire and forget (sync trigger)
+        _player.play(kIsWeb ? UrlSource('assets/assets/audio/background.mp3') : AssetSource(_audioAsset)); // Fire and forget (sync trigger)
       } else {
         _player.pause();
       }
