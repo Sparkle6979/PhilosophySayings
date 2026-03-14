@@ -1,31 +1,36 @@
-# v1.1.0 - 全知之海 (The Omniscient Ocean) 🌊： 完整沉浸式哲学体验首发
+# v1.2.0 - 禅定时刻 (Zen Moment) 🧘‍♂️：音画同频与极限兼容
 
-Welcome to the **Philosophy Sayings (沉思室)** v1.1.0 major release! This version introduces a fully realized, immersive aesthetic experience, dropping you directly into profound conversations with history's greatest minds.
+欢迎来到 **Philosophy Sayings (沉思室)** v1.2.0 迭代版本！我们在这个版本中不仅补充了先哲的画卷，更打通了听觉的维度。
 
 ## 🌟 核心亮点 (What's New)
 
-### 1. 极简先锋派全套肖像画 (Custom Minimalist Art Gallery)
-We have completely overhauled the visuals with nearly 30 bespoke, AI-generated philosopher portraits. Featuring a pure white background, continuous minimalist black ink lines, and subtle Morandi color accents. The 1:1 crisp portrait layout ensures a clean, non-oppressive aesthetic.
+### 1. 禅意环境音 (Focus Ambient Music) 🎵
+- 引入高品质环境白噪音，帮助您在思考时快速进入“心流”状态。
+- **独立控制**：在设置页面中提供独立的音量控制与开关，支持持久化存储。
+- **多处触达**：在初始页面与设置页面均可一键开启，并伴有细腻的触感反馈（Haptic Feedback）。
 
-### 2. 现代主义排版与视觉 (Modernist Typography & Layout)
-The UI has been meticulously refined across all platforms. We introduced an icy-white/pale silver palette (`#F5F7FA`) for the reading area, doubled the breathing room around quotes, and implemented traditional 2-space indented paragraph formatting for a highly polished, book-like reading experience.
+### 2. 先哲画卷补齐 (Expanded Sage Portraits) 🎨
+- 新增 **泰勒斯 (Thales)** 与 **亚里士多德 (Aristotle)** 的专属极简线条肖像。
+- 全站资产无损迁移至 `.webp` 格式，大幅优化加载效率，减少空间占用。
 
-### 3. 哲学家的密室 (The Philosopher's Chamber) - Immersive Chat
-Step into the dark, private "chamber" of the mind. You can now deeply explore the meaning of any quote by chatting directly with its author. Powered by our multi-model LLM engine with tailored persona prompts, the philosopher will contextually initiate the conversation based on the quote you bring them.
+### 3. macOS 极限环境兼容 (Hotfix & Compatibility) 🛠️
+- 针对 Xcode 14.3 环境实现了“物理层面”的音频库补丁，彻底解决了旧版 macOS 系统无法编译新版音频驱动的问题。
+- 锁定了依赖版本，确保在不同开发者环境下的编译稳定性。
 
-### 4. 灵魂回音 (Echoes of the Soul - Favorites)
-A dedicated, beautifully styled masonry grid space to revisit your collected wisdom, complete with local offline persistence.
-
-### 5. 跨平台开箱即用 (Cross-Platform "Experience Mode")
-This release comes with a **built-in Experience Mode**. If you download the pre-packaged binaries below, you can jump straight into the philosophy—no API key configuration required! (To prevent abuse, the built-in key is gracefully limited to 20 DeepSeek API calls per day).
+### 4. 视觉细节打磨 (Visual Polish) ✨
+- 修正了 README 及其相关文档中的图片路径问题。
+- 文案细节调整，提供更统一的极简主义中英文对照。
 
 ---
 
 ## 📦 安装包下载 (Assets)
 
-Please download the artifacts below (under `Assets`) corresponding to your platform:
-- 🍏 **macOS**: Download `PhilosophySayings.dmg` or `PhilosophySayings.zip`.
-- 🤖 **Android**: Download `PhilosophySayings.apk`.
-- 🪟 **Windows**: Download `PhilosophySayings-Windows.zip`.
+请根据您的平台下载下方的产物：
+- 🍏 **macOS**: 下载 `PhilosophySayings.dmg`。
+- 🤖 **Android**: 下载 `PhilosophySayings.apk`。
+- 🪟 **Windows**: 下载 `PhilosophySayings-Windows.zip` (由 GitHub Actions 自动构建)。
 
-*(Note: These built binaries have our API key securely injected, so you can enjoy the app offline/out-of-the-box!)*
+> **注**：Windows 版本将在 GitHub Tag 发布后由自动流水线生成，请耐心等待。
+
+---
+*由 Antigravity 与 Sparkle79 共同谛造*
