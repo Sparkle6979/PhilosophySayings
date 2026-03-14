@@ -12,6 +12,7 @@
 
 我们为您准备了开箱即用的体验版（内置开发者赞助的体验额度，每日限制以防滥用，无需配置 API Key 即可立即体验）：
 
+* **🌐 Web / iOS (PWA)**: [🚀 立即访问网页版体验](https://slspk.ltd/app/philosophysayings/) *(iOS 用户可在 Safari 中选择「添加到主屏幕」获得原生般体验)*
 * **macOS**: [⏬ 下载 PhilosophySayings.dmg](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.2.0/PhilosophySayings.dmg) *(注：双击打开并拖入应用程序；如遇拦截，请在系统设置 -> 隐私与安全性中点击「仍要打开」)*
 * **Android**: [⏬ 下载 PhilosophySayings.apk](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.2.0/PhilosophySayings.apk) *(直接安装)*
 * **Windows**: [⏬ 下载 PhilosophySayings-Windows.zip](https://github.com/Sparkle6979/PhilosophySayings/releases/download/v1.2.0/PhilosophySayings-Windows.zip) *(解压后双击运行 philosophy_sayings.exe)*
