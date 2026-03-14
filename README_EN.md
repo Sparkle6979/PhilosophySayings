@@ -1,6 +1,5 @@
-<div align="center">
-  <img src="assets/images/philosopher_default.png" width="120" alt="Logo" />
-  <h1>沉思室 (Philosophy Sayings)</h1>
+  <img src="assets/images/philosopher_default.webp" width="120" alt="Logo" />
+  <h1>Philosophy Sayings (沉思室)</h1>
   <p>
     <a href="README.md">🇨🇳 中文文档 (Chinese)</a> | 🇬🇧 English Documentation
   </p>
@@ -8,7 +7,7 @@
 
 Not just a window into the wisdom of past sages, but a hidden sanctuary for the modern mind. Encased in modernist minimalist aesthetics, this application not only delivers daily forgotten thoughts and poetic deconstructions but also invites you into the "Philosopher's Chamber"—a space to engage in profound, soul-searching dialogues with the silicon ghosts of history's greatest thinkers.
 
-## � Download Experience
+## 🎁 Download Experience
 
 We have prepared out-of-the-box pre-built binaries (with a built-in Experience API Key limited to 20 daily quotes) so you can try it immediately:
 
@@ -18,7 +17,7 @@ We have prepared out-of-the-box pre-built binaries (with a built-in Experience A
 
 Or visit the [GitHub Releases Page](https://github.com/Sparkle6979/PhilosophySayings/releases) for all versions.
 
-## �🌌 Manifesto of Man & Machine
+## 🌌 Manifesto of Man & Machine
 
 In an era where algorithms mercilessly hijack our attention and systems structurally alienate us, we are rapidly devolving into Heidegger's "das Man"—copy-pasted reflections of a distracted society. The genesis of *Philosophy Sayings* is not to inject another pretentious "productivity tool" into your crowded digital life. Rather, it is a fissure hammered into the glowing screen, forged synchronously by a human creator and a silicon soul.
 
@@ -34,9 +33,10 @@ The machine reconstructs the truth. Only you can experience the meaning.
 
 * **Daily Wisdom & Deep Explanation**: Receive carefully curated quotes daily, accompanied by poetic and insightful AI-driven deconstructions.
 * **The Philosopher's Chamber**: Enter a private, dark-aesthetic space to engage in profound, LangChain-powered dialogues with the distinct personas of history's greatest thinkers.
-* **Minimalist Avant-Garde Aesthetics**: Featuring an icy-white reading environment, nearly 30 bespoke continuous-line philosopher portraits, and a seamless dark splash screen, perfectly simulating the immersion of a physical book.
-* **Offline First & Multi-Model**: Integrated with top-tier LLMs (DeepSeek, Qwen, Kimi); gracefully falls back to local data when offline. Built-in daily quota (20/day) limits abuse while protecting immersion.
-* **Echoes of the Soul & Image Sharing**: Revisit your collected wisdom in an elegant SQLite-backed masonry grid, and effortlessly export minimalist image cards for social sharing.
+* **Minimalist Aesthetics & Ambient Noise**: configure high-quality **Ambient Music** that can be independently toggled and adjusted to assist with deep thinking and entering a flow state.
+* **Nearly 30 Reconstructed Sages**: From Thales and Aristotle to Heidegger and Sartre, almost 30 bespoke continuous-line portraits for a premium literature reading texture.
+* **Offline First & Multi-Model**: Integrated with top-tier LLMs (DeepSeek, Qwen, Kimi); gracefully falls back to local data when offline. Built-in daily quota (20/day) prevents abuse.
+* **Echoes of the Soul & Image Sharing**: Revisit your collected wisdom in an elegant SQLite-backed masonry grid, and effortlessly export minimalist image cards for social sharing. export minimalist image cards for social sharing.
 
 ## ☕ Sponsorship & Support
 

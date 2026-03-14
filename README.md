@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/images/philosopher_default.png" width="120" alt="Logo" />
+  <img src="assets/images/philosopher_default.webp" width="120" alt="Logo" />
   <h1>沉思室 (Philosophy Sayings)</h1>
   <p>
     <a href="README_EN.md">🇬🇧 English Documentation</a> | 🇨🇳 中文文档
@@ -34,8 +34,9 @@
 
 * **每日启示与哲言妄解**: 每日递送精选哲学名言，并配以极具诗意与深度的 AI 结构性解读。
 * **哲学家的密室**: 步入深色美学的私密空间，基于 LangChain 驱动的专属人格引擎，与哲学家进行直击灵魂的跨时空对话。
-* **极简先锋派美学**: 冰川白文本环境，内置近30位顶尖哲学家专属 AI 单线肖像画，辅以沉浸式无缝暗黑启动页，极致还原纸质书阅读质感。
+* **极简先锋派美学 & 氛围白噪**: 冰川白与深邃黑文本环境，配置可独立启闭与调节音量的高质量**环境声学纹理 (Ambient Music)**，协助深度思考与进入心流状态。
 * **离线优先与多模型适配**: 支持 DeepSeek、Qwen、Kimi 等领域顶尖大模型；无网时自动降级至本地数据；每日20次内置免费额度，防止沉迷与恶意滥用。
+* **近三十位先哲的硅基重塑**: 从泰勒斯 (Thales)、亚里士多德 (Aristotle) 到海德格尔与萨特，近30位顶尖哲学家专属 AI 单线肖像画，极致还原纸质书与严肃文学阅读质感。
 * **灵魂回音与社交分享**: SQLite 本地持久化收藏夹，沉浸式瀑布流布局，支持一键生成极简图文卡片分享至社交网络。
 
 ## ☕ 赞助与支持 (Sponsorship)
